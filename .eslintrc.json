@@ -5,6 +5,7 @@
     "jest": true
   },
   "extends": [
+    "../../.eslintrc.js",
     "eslint:recommended",
     "plugin:react/recommended",
     "plugin:@typescript-eslint/recommended",
