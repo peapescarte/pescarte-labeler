@@ -23,6 +23,8 @@ export const StyledMain = styled.main`
   margin-right: 1rem;
   grid-area: main;
   grid-row: 2;
+  display: flex;
+  flex-direction: column;
 `;
 
 export const StyledAside = styled.aside`
@@ -30,7 +32,7 @@ export const StyledAside = styled.aside`
   grid-row: 2;
   margin-left: 1rem;
   width: 100%;
-  height: 100%;
+  height: calc(100vh - 5rem);
 `;
 
 export const StyledFooter = styled.footer`
@@ -50,4 +52,13 @@ export const StyledFooter = styled.footer`
     align-items: center;
     flex-grow: 1;
   }
+`;
+
+export const MediaViwerWrapper = styled.div`
+  height: calc(100% - 6rem);
+`;
+
+export const InputLabelWrapper = styled.div`
+  margin-top: 2rem;
+  margin-bottom: 1rem;
 `;
