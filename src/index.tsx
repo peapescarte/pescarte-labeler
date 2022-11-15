@@ -4,8 +4,10 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import Theme from './Theme';
+import { startMSW } from './mocks/browser';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
+startMSW();
 root.render(
   <React.StrictMode>
     <Theme>

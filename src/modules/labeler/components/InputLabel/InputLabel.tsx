@@ -1,28 +1,40 @@
 import React, { useState } from 'react';
 import { useContextLabeler } from '../../providers/LabelerProvider';
-import { Input, SubmitButton } from './components';
+import { Input } from './components';
 import { InputLabelForm, StyledSelectCategory, StyledSubmitButton } from './styles';
 
 export const InputLabel: React.FC = () => {
   const [label, setLabel] = useState('');
-  const { addNewLabel } = useContextLabeler();
-  const [selectedCategory, setSelectedCategory] = useState('');
+  const { addNewLabel, categories, activatedMedia } = useContextLabeler();
+  const [selectedCategoryById, setSelectedCategoryById] = useState('');
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    addNewLabel({ id: label, label, category_id: selectedCategory, media_id: 'a' });
+
+    if (!activatedMedia || !isValidNewLabel(label)) return;
+
+    addNewLabel({
+      label,
+      category_id: selectedCategoryById,
+      media_id: activatedMedia.id,
+    });
+
+    setLabel('');
+  };
+
+  const isValidNewLabel = (newLabel: string) => {
+    if (newLabel === '') return false;
+
+    return true;
   };
 
   return (
     <InputLabelForm onSubmit={(e) => handleSubmit(e)}>
       <StyledSelectCategory
-        options={[
-          { id: 'testeid', name: 'teste' },
-          { id: 'teste2id', name: 'teste2' },
-        ]}
-        onSelectCallback={(value) => setSelectedCategory(value)}
+        options={categories}
+        onSelectCallback={(value) => setSelectedCategoryById(value)}
       />
-      <Input onChangeCallback={(val) => setLabel(val)} placeholder="Label" />
+      <Input value={label} onChangeCallback={(val) => setLabel(val)} placeholder="Label" />
       <StyledSubmitButton type="submit" />
     </InputLabelForm>
   );

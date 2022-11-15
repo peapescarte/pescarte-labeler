@@ -33,7 +33,3 @@ export const StyledLabelerListItens = styled.div`
   max-height: 100%;
   overflow-y: scroll;
 `;
-
-export const StyledLabel = styled.span`
-  font-size: ${(props) => props.theme.fontSizes.medium};
-`;

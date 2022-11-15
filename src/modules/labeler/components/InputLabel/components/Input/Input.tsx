@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { StyledInputLabel } from './styles';
 
 export type InputLabelTypes = React.InputHTMLAttributes<HTMLInputElement> & {

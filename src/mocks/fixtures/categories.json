@@ -1,0 +1,20 @@
+{
+  "categories": [
+    {
+      "id": "ed76bc0a-2169-45e0-b34d-80b73438d0d8",
+      "name": "autoral"
+    },
+    {
+      "id": "e3a968b3-cb5b-4aac-8980-10820cb36edd",
+      "name": "local"
+    },
+    {
+      "id": "0bbee409-52be-49df-be06-100f841e2c9b",
+      "name": "conteúdo"
+    },
+    {
+      "id": "0bbef409-52bf-49df-be06-100f841f2c9b",
+      "name": "eventos"
+    }
+  ]
+}
