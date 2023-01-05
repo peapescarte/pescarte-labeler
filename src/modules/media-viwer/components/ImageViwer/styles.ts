@@ -5,7 +5,11 @@ export const StyledImageViwer = styled.div`
   height: 100%;
 `;
 
-export const StyledImage = styled.img`
+type StyledImageProps = {
+  isLoading: boolean;
+};
+export const StyledImage = styled.img<StyledImageProps>`
   width: 100%;
   height: 100%;
+  visibility: ${(props) => (props.isLoading ? 'hidden' : 'visible')};
 `;

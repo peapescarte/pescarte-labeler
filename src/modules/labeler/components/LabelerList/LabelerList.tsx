@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { useContextLabelerData } from '../../providers/LabelerDataProvider';
 import { useContextLabeler } from '../../providers/LabelerProvider';
 import { LabelerListItem } from './components/LabelerListItem';
 import {
@@ -10,8 +11,20 @@ import {
 
 export const LabelerList = () => {
   const { activatedMedia } = useContextLabeler();
-  const { categories } = useContextLabeler();
+  const { categories } = useContextLabelerData();
   const [selectedCategory, setSelectedCategory] = useState('');
+
+  const tags = useMemo(
+    () => activatedMedia?.tags.filter((tag) => tag.category_id === selectedCategory),
+    [activatedMedia, selectedCategory],
+  );
+
+  useEffect(() => {
+    if (!categories.length) return;
+
+    setSelectedCategory(categories[0].id);
+  }, [categories]);
+
   return (
     <StyledLabelerList>
       <StyledLabelerListBox>
@@ -20,11 +33,9 @@ export const LabelerList = () => {
           onSelectCallback={(value) => setSelectedCategory(value)}
         />
         <StyledLabelerListItens>
-          {activatedMedia?.tags
-            .filter((tag) => tag.category_id === selectedCategory)
-            .map((tag) => {
-              return <LabelerListItem key={tag.id}>{tag.label}</LabelerListItem>;
-            })}
+          {tags?.map((tag) => {
+            return <LabelerListItem key={tag.id}>{tag.label}</LabelerListItem>;
+          })}
         </StyledLabelerListItens>
       </StyledLabelerListBox>
     </StyledLabelerList>

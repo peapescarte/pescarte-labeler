@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
+import { useContextLabelerData } from '../../providers/LabelerDataProvider';
 import { useContextLabeler } from '../../providers/LabelerProvider';
 import { Input } from './components';
 import { InputLabelForm, StyledSelectCategory, StyledSubmitButton } from './styles';
 
 export const InputLabel: React.FC = () => {
   const [label, setLabel] = useState('');
-  const { addNewLabel, categories, activatedMedia } = useContextLabeler();
+  const { addNewLabel, activatedMedia } = useContextLabeler();
+  const { categories } = useContextLabelerData();
   const [selectedCategoryById, setSelectedCategoryById] = useState('');
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {

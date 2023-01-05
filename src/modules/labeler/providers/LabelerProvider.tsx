@@ -1,55 +1,93 @@
-import { createContext, ReactNode, useContext, useEffect, useMemo, useState } from 'react';
+import {
+  createContext,
+  ReactNode,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { usePescarteLabelerService } from '../../../hooks/usePescateLabelerService';
-import { TagedMedia } from '../interfaces/labeler';
-import { Category, Tag } from '../interfaces/media';
+import { usePescarteLabelerService } from '../hooks/usePescateLabelerService';
+import { Tag, TaggedMedia } from '../interfaces';
+import { useContextLabelerData } from './LabelerDataProvider';
 
 interface LabelerProviderProps {
   children: ReactNode;
 }
 
 interface LabelerContextProps {
-  tagedMedias: TagedMedia[];
-  activatedMedia: TagedMedia | undefined;
+  activatedMedia: TaggedMedia | undefined;
   addNewLabel: (tag: Omit<Tag, 'id'>) => void;
-  categories: Category[];
+  goToNextMedia: () => void;
+  goToPrevMedia: () => void;
 }
 
 const LabelerContext = createContext<LabelerContextProps | undefined>(undefined);
-const mockMedia: TagedMedia = {
-  id: 'a',
-  external_id: 'a',
-  link: 'a',
-  tags: [{ category_id: 'b', id: 'a', label: 'teste1', media_id: 'asd' }],
-  type: 'image',
-};
+
 export function LabelerProvider({ children }: LabelerProviderProps): JSX.Element {
-  const [tagedMedias, setTagedMedias] = useState<TagedMedia[]>([mockMedia]);
-  const [activatedMedia, setActivatedMedia] = useState<TagedMedia>(tagedMedias[0]);
-  const [categories, setCategories] = useState<Category[]>([]);
+  const { medias } = useContextLabelerData();
+  const [activatedMedia, setActivatedMedia] = useState<TaggedMedia>();
   const pescarteService = usePescarteLabelerService();
 
-  const addNewLabel = (tag: Omit<Tag, 'id'>) => {
+  const addNewLabel = useCallback(
+    (tag: Omit<Tag, 'id'>) => {
+      if (!activatedMedia) return;
+
+      // chamada backend para adicionar uma nova tag, temporariamente código a baixo
+      const newTag: Tag = { ...tag, id: uuidv4() };
+
+      setActivatedMedia({
+        ...activatedMedia,
+        tags: [...activatedMedia.tags, newTag],
+      });
+    },
+    [activatedMedia, setActivatedMedia],
+  );
+
+  const goToNextMedia = useCallback(async () => {
     if (!activatedMedia) return;
 
-    // chamada backend para adicionar uma nova tag, temporariamente código a baixo
-    const newTag: Tag = { ...tag, id: uuidv4() };
+    const activatedMediaIndex = medias.findIndex((media) => media.id === activatedMedia.id);
 
-    setActivatedMedia({
-      ...activatedMedia,
-      tags: [...activatedMedia.tags, newTag],
-    });
-  };
+    const NextIndex = activatedMediaIndex + 1 >= medias.length ? 0 : activatedMediaIndex + 1;
+
+    const nextMedia = medias[NextIndex];
+
+    const tags = await pescarteService.getMediaTags(nextMedia.id);
+
+    setActivatedMedia({ ...nextMedia, tags });
+  }, [activatedMedia]);
+
+  const goToPrevMedia = useCallback(async () => {
+    if (!activatedMedia) return;
+
+    const activatedMediaIndex = medias.findIndex((media) => media.id === activatedMedia.id);
+
+    const NextIndex = activatedMediaIndex - 1 < 0 ? medias.length - 1 : activatedMediaIndex - 1;
+
+    const nextMedia = medias[NextIndex];
+
+    const tags = await pescarteService.getMediaTags(nextMedia.id);
+
+    setActivatedMedia({ ...nextMedia, tags });
+  }, [activatedMedia]);
 
   useEffect(() => {
-    pescarteService.getCategories().then((categoriesFromApi) => {
-      setCategories(categoriesFromApi);
-    });
-  }, []);
+    if (!medias.length) return;
+
+    const initialize = async () => {
+      const tags = await pescarteService.getMediaTags(medias[0].id);
+
+      setActivatedMedia({ ...medias[0], tags });
+    };
+
+    initialize();
+  }, [medias]);
 
   const values = useMemo(
-    () => ({ tagedMedias, activatedMedia, addNewLabel, categories }),
-    [tagedMedias, activatedMedia, addNewLabel, categories],
+    () => ({ activatedMedia, addNewLabel, goToNextMedia, goToPrevMedia }),
+    [activatedMedia, addNewLabel, goToNextMedia, goToPrevMedia],
   );
 
   return <LabelerContext.Provider value={values}>{children}</LabelerContext.Provider>;

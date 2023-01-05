@@ -1,5 +1,5 @@
 import React from 'react';
-import { IconPlus } from '../../../../../../common/icons/icon-plus';
+import PlusIcon from '../../../../../../assets/icons/plus-solid.svg';
 import { StyledIcon, StyledInputLabelButton } from './styles';
 
 export type SubmitButtonTypes = React.ButtonHTMLAttributes<HTMLButtonElement>;
@@ -7,9 +7,7 @@ export type SubmitButtonTypes = React.ButtonHTMLAttributes<HTMLButtonElement>;
 export const SubmitButton: React.FC<SubmitButtonTypes> = (props: SubmitButtonTypes) => {
   return (
     <StyledInputLabelButton {...props}>
-      <StyledIcon>
-        <IconPlus />
-      </StyledIcon>
+      <StyledIcon src={PlusIcon} alt="" />
     </StyledInputLabelButton>
   );
 };

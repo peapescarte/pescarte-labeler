@@ -54,11 +54,10 @@ export const StyledFooter = styled.footer`
   }
 `;
 
-export const MediaViwerWrapper = styled.div`
-  height: calc(100% - 6rem);
-`;
-
-export const InputLabelWrapper = styled.div`
+export const ControllersWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   margin-top: 2rem;
   margin-bottom: 1rem;
 `;

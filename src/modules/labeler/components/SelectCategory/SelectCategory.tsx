@@ -1,5 +1,5 @@
 import React from 'react';
-import { Category } from '../../interfaces/media';
+import { Category } from '../../interfaces';
 import { StyledOptionCategory, StyledSelectCategory } from './styles';
 
 export type SelectCategoryType = {

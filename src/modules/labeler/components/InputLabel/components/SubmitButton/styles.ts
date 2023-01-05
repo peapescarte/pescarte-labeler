@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { IconPlus } from '../../../../../../common/icons/icon-plus';
 
 export const StyledInputLabelButton = styled.button`
   height: 3rem;
@@ -12,10 +11,7 @@ export const StyledInputLabelButton = styled.button`
   align-items: center;
 `;
 
-export const StyledIcon = styled.div`
-  display: flex;
-  svg {
-    width: 2.5rem;
-    height: 2.5rem;
-  }
+export const StyledIcon = styled.img`
+  width: 2rem;
+  height: 2rem;
 `;

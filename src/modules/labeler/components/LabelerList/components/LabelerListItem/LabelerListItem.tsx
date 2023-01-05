@@ -1,6 +1,5 @@
 import { useState } from 'react';
-import { IconPencil } from '../../../../../../common/icons/icon-pincel';
-import { useContextLabeler } from '../../../../providers/LabelerProvider';
+import { IconPencil } from '../../../../../../assets/icons/icon-pincel';
 import { LabelEditable } from '../LabelEditable';
 import { StyledEditButton, StyledListItem } from './styles';
 
@@ -10,8 +9,6 @@ type LabelerListItem = {
 
 export const LabelerListItem = ({ children }: LabelerListItem) => {
   const [isEditmode, SetIsEditMode] = useState(false);
-  const { addNewLabel, categories, activatedMedia } = useContextLabeler();
-  const [selectedCategoryById, setSelectedCategoryById] = useState('');
 
   const handleEditClick = () => {
     SetIsEditMode(!isEditmode);
