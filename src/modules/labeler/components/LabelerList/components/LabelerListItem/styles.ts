@@ -13,11 +13,21 @@ export const StyledListItem = styled.div`
   }
 `;
 
-export const StyledEditButton = styled.button`
+export const StyledButton = styled.button`
   display: flex;
   border: 0;
   background-color: transparent;
   cursor: pointer;
-  margin-right: 1.5rem;
-  margin-left: 1rem;
+  margin-right: 1rem;
+`;
+
+export const StyledIcon = styled.img`
+  width: 2rem;
+  height: 2rem;
+`;
+export const StyledIconPlus = styled(StyledIcon)`
+  transform: rotate(45deg);
+`;
+export const StyledListItemTools = styled.div`
+  display: flex;
 `;

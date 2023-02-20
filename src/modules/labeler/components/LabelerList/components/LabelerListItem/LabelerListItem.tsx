@@ -1,13 +1,22 @@
 import { useState } from 'react';
 import { IconPencil } from '../../../../../../assets/icons/icon-pincel';
+import IconPlus from '../../../../../../assets/icons/plus-solid.svg';
+import { useContextLabeler } from '../../../../providers/LabelerProvider';
 import { LabelEditable } from '../LabelEditable';
-import { StyledEditButton, StyledListItem } from './styles';
+import {
+  StyledButton,
+  StyledIcon,
+  StyledIconPlus,
+  StyledListItem,
+  StyledListItemTools,
+} from './styles';
 
 type LabelerListItem = {
   children: string;
+  onRemoveCallback: () => void;
 };
 
-export const LabelerListItem = ({ children }: LabelerListItem) => {
+export const LabelerListItem = ({ children, onRemoveCallback }: LabelerListItem) => {
   const [isEditmode, SetIsEditMode] = useState(false);
 
   const handleEditClick = () => {
@@ -17,6 +26,11 @@ export const LabelerListItem = ({ children }: LabelerListItem) => {
   const handleEditReturn = (newLabel: string) => {
     SetIsEditMode(false);
     if (children === newLabel) return;
+
+    if (newLabel === '') {
+      onRemoveCallback();
+      return;
+    }
 
     console.log(newLabel);
   };
@@ -28,9 +42,14 @@ export const LabelerListItem = ({ children }: LabelerListItem) => {
         label={children}
         onChangeCallback={(newLabel) => handleEditReturn(newLabel)}
       />
-      <StyledEditButton onClick={handleEditClick}>
-        <IconPencil />
-      </StyledEditButton>
+      <StyledListItemTools>
+        <StyledButton onClick={handleEditClick}>
+          <IconPencil />
+        </StyledButton>
+        <StyledButton onClick={onRemoveCallback}>
+          <StyledIconPlus src={IconPlus} />
+        </StyledButton>
+      </StyledListItemTools>
     </StyledListItem>
   );
 };

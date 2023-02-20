@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useContextLabelerData } from '../../providers/LabelerDataProvider';
 import { useContextLabeler } from '../../providers/LabelerProvider';
 import { Input } from './components';
@@ -35,6 +35,8 @@ export const InputLabel: React.FC = () => {
       <StyledSelectCategory
         options={categories}
         onSelectCallback={(value) => setSelectedCategoryById(value)}
+        isRequired
+        defaultValue="selecione..."
       />
       <Input value={label} onChangeCallback={(val) => setLabel(val)} placeholder="Label" />
       <StyledSubmitButton type="submit" />

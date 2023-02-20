@@ -21,6 +21,7 @@ interface LabelerContextProps {
   addNewLabel: (tag: Omit<Tag, 'id'>) => void;
   goToNextMedia: () => void;
   goToPrevMedia: () => void;
+  removeLabel: (id: string) => void;
 }
 
 const LabelerContext = createContext<LabelerContextProps | undefined>(undefined);
@@ -34,12 +35,34 @@ export function LabelerProvider({ children }: LabelerProviderProps): JSX.Element
     (tag: Omit<Tag, 'id'>) => {
       if (!activatedMedia) return;
 
+      const repeated = activatedMedia.tags.find((item) => item.label === tag.label);
+      if (repeated) {
+        alert('label repetida');
+        return;
+      }
+
       // chamada backend para adicionar uma nova tag, temporariamente código a baixo
       const newTag: Tag = { ...tag, id: uuidv4() };
 
       setActivatedMedia({
         ...activatedMedia,
         tags: [...activatedMedia.tags, newTag],
+      });
+    },
+    [activatedMedia, setActivatedMedia],
+  );
+
+  const removeLabel = useCallback(
+    (id: string) => {
+      if (!activatedMedia) return;
+
+      const tagRemoved = activatedMedia.tags.filter((item) => item.id !== id);
+
+      // chamada backend para remover uma tag, temporariamente código a baixo
+
+      setActivatedMedia({
+        ...activatedMedia,
+        tags: tagRemoved,
       });
     },
     [activatedMedia, setActivatedMedia],
@@ -86,8 +109,8 @@ export function LabelerProvider({ children }: LabelerProviderProps): JSX.Element
   }, [medias]);
 
   const values = useMemo(
-    () => ({ activatedMedia, addNewLabel, goToNextMedia, goToPrevMedia }),
-    [activatedMedia, addNewLabel, goToNextMedia, goToPrevMedia],
+    () => ({ activatedMedia, addNewLabel, removeLabel, goToNextMedia, goToPrevMedia }),
+    [activatedMedia, addNewLabel, removeLabel, goToNextMedia, goToPrevMedia],
   );
 
   return <LabelerContext.Provider value={values}>{children}</LabelerContext.Provider>;

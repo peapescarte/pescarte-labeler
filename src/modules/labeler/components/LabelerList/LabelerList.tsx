@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { Tag } from '../../interfaces';
 import { useContextLabelerData } from '../../providers/LabelerDataProvider';
 import { useContextLabeler } from '../../providers/LabelerProvider';
 import { LabelerListItem } from './components/LabelerListItem';
@@ -10,7 +11,7 @@ import {
 } from './styles';
 
 export const LabelerList = () => {
-  const { activatedMedia } = useContextLabeler();
+  const { activatedMedia, removeLabel } = useContextLabeler();
   const { categories } = useContextLabelerData();
   const [selectedCategory, setSelectedCategory] = useState('');
 
@@ -18,6 +19,10 @@ export const LabelerList = () => {
     () => activatedMedia?.tags.filter((tag) => tag.category_id === selectedCategory),
     [activatedMedia, selectedCategory],
   );
+
+  const handleRemoveTag = (tag: Tag) => {
+    removeLabel(tag.id);
+  };
 
   useEffect(() => {
     if (!categories.length) return;
@@ -34,7 +39,11 @@ export const LabelerList = () => {
         />
         <StyledLabelerListItens>
           {tags?.map((tag) => {
-            return <LabelerListItem key={tag.id}>{tag.label}</LabelerListItem>;
+            return (
+              <LabelerListItem key={tag.id} onRemoveCallback={() => handleRemoveTag(tag)}>
+                {tag.label}
+              </LabelerListItem>
+            );
           })}
         </StyledLabelerListItens>
       </StyledLabelerListBox>
