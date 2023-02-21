@@ -1,0 +1,1 @@
+export { LabelerMediaDescription } from './LabelerMediaDescription';

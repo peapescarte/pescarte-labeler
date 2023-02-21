@@ -3,18 +3,27 @@ import { ThemeProvider } from 'styled-components';
 
 const theme = {
   colors: {
-    primary: '#006093',
-    secondary: '#CA6C39',
+    primary: '#3383D3',
+    secondary: '#FF8B33',
     background: '#dce1de',
     white: '#FFF',
     black: '#000',
+    border: '#E7E7E7',
+    neutra80: '#404040',
+    neutra5: '#F3F3F3',
   },
-  fonts: ['sans-serif', 'Roboto'],
+  fonts: ['Work Sans', 'sans-serif', 'Roboto'],
   fontSizes: {
     xsmall: '1rem',
-    small: '1.5rem',
+    small: '1.2rem',
+    regular: '1.4rem',
     medium: '2rem',
-    large: '3rem',
+    mediumLarge: '2.4rem',
+    large: '3.2rem',
+  },
+  zIndex: {
+    awaysOnTop: '999',
+    dropdown: '10',
   },
 };
 

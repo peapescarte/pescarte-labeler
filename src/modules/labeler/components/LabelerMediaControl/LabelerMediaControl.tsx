@@ -16,10 +16,10 @@ export const LabelerMediaControl = () => {
 
   return (
     <StyledMediaControlContainer>
-      <StyledMediaControlButton onClick={handlePrevClick}>
+      <StyledMediaControlButton onClick={handlePrevClick} title="Ir para Mídia anterior">
         <StyledIcon src={IconArrowLeft} alt="Icone flecha para esquerda" />
       </StyledMediaControlButton>
-      <StyledMediaControlButton onClick={handleNextClick}>
+      <StyledMediaControlButton onClick={handleNextClick} title="Ir para próxima Mídia">
         <StyledIcon src={IconArrowRight} alt="Icone flecha para direita" />
       </StyledMediaControlButton>
     </StyledMediaControlContainer>

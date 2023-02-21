@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Tag } from '../../interfaces';
+import { Category, Tag } from '../../interfaces';
 import { useContextLabelerData } from '../../providers/LabelerDataProvider';
 import { useContextLabeler } from '../../providers/LabelerProvider';
 import { LabelerListItem } from './components/LabelerListItem';
@@ -7,16 +7,16 @@ import {
   StyledLabelerList,
   StyledLabelerListBox,
   StyledLabelerListItens,
-  StyledSelectCategory,
+  StyledDropDown,
 } from './styles';
 
 export const LabelerList = () => {
   const { activatedMedia, removeLabel } = useContextLabeler();
   const { categories } = useContextLabelerData();
-  const [selectedCategory, setSelectedCategory] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState<Category>();
 
   const tags = useMemo(
-    () => activatedMedia?.tags.filter((tag) => tag.category_id === selectedCategory),
+    () => activatedMedia?.tags.filter((tag) => tag.category_id === selectedCategory?.id),
     [activatedMedia, selectedCategory],
   );
 
@@ -27,15 +27,16 @@ export const LabelerList = () => {
   useEffect(() => {
     if (!categories.length) return;
 
-    setSelectedCategory(categories[0].id);
+    setSelectedCategory(categories[0]);
   }, [categories]);
 
   return (
     <StyledLabelerList>
       <StyledLabelerListBox>
-        <StyledSelectCategory
+        <StyledDropDown
           options={categories}
-          onSelectCallback={(value) => setSelectedCategory(value)}
+          onSelectCallback={(category) => setSelectedCategory(category)}
+          defaultValue={selectedCategory?.name}
         />
         <StyledLabelerListItens>
           {tags?.map((tag) => {

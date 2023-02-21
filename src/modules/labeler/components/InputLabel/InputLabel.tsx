@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useContextLabelerData } from '../../providers/LabelerDataProvider';
 import { useContextLabeler } from '../../providers/LabelerProvider';
 import { Input } from './components';
-import { InputLabelForm, StyledSelectCategory, StyledSubmitButton } from './styles';
+import { InputLabelForm, StyledDropDown, StyledSubmitButton } from './styles';
 
 export const InputLabel: React.FC = () => {
   const [label, setLabel] = useState('');
@@ -13,7 +13,7 @@ export const InputLabel: React.FC = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!activatedMedia || !isValidNewLabel(label)) return;
+    if (!activatedMedia || !isValidNewLabel(label) || selectedCategoryById === '') return;
 
     addNewLabel({
       label,
@@ -32,14 +32,13 @@ export const InputLabel: React.FC = () => {
 
   return (
     <InputLabelForm onSubmit={(e) => handleSubmit(e)}>
-      <StyledSelectCategory
+      <StyledDropDown
         options={categories}
-        onSelectCallback={(value) => setSelectedCategoryById(value)}
-        isRequired
+        onSelectCallback={(category) => setSelectedCategoryById(category.id)}
         defaultValue="selecione..."
       />
       <Input value={label} onChangeCallback={(val) => setLabel(val)} placeholder="Label" />
-      <StyledSubmitButton type="submit" />
+      <StyledSubmitButton type="submit" title="Adicionar nova etiqueta" />
     </InputLabelForm>
   );
 };

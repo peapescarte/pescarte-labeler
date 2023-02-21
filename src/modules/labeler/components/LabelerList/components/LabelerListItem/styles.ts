@@ -9,7 +9,6 @@ export const StyledListItem = styled.div`
   svg {
     width: 1.5rem;
     height: 1.5rem;
-    fill: ${(props) => props.theme.colors.primary};
   }
 `;
 

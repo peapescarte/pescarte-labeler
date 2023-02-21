@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { SelectCategory } from '../SelectCategory';
+import { DropDown } from '../DropDown';
 
 export const StyledLabelerList = styled.div`
   width: 100%;
@@ -9,9 +9,7 @@ export const StyledLabelerList = styled.div`
 
 export const StyledLabelerListTitle = styled.h2``;
 
-export const StyledSelectCategory = styled(SelectCategory)`
-  height: 3rem;
-  border: 1px solid ${(props) => props.theme.colors.primary};
+export const StyledDropDown = styled(DropDown)`
   margin-bottom: 1rem;
 `;
 
@@ -20,9 +18,10 @@ export const StyledLabelerListBox = styled.div`
   flex-direction: column;
   width: 100%;
   height: 100%;
-  border: 2px solid ${(props) => props.theme.colors.primary};
+  border: 2px solid ${(props) => props.theme.colors.border};
   padding: 2rem;
-  background-color: ${(props) => props.theme.colors.background};
+  background-color: ${(props) => props.theme.colors.neutra5};
+  border-radius: 4px;
 `;
 
 export const StyledLabelerListItens = styled.div`
@@ -32,4 +31,5 @@ export const StyledLabelerListItens = styled.div`
   height: 100%;
   max-height: 100%;
   overflow-y: scroll;
+  padding-left: 0.8rem;
 `;
