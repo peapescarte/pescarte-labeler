@@ -20,13 +20,6 @@ export const StyledButton = styled.button`
   margin-right: 1rem;
 `;
 
-export const StyledIcon = styled.img`
-  width: 2rem;
-  height: 2rem;
-`;
-export const StyledIconPlus = styled(StyledIcon)`
-  transform: rotate(45deg);
-`;
 export const StyledListItemTools = styled.div`
   display: flex;
 `;

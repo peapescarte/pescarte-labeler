@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import ArrowIconSvg from '../../../../assets/icons/chevron-down.svg';
 import { OptionCategory } from './components/OptionCategory';
 import {
   ArrowIcon,
@@ -40,7 +39,7 @@ export const DropDown = ({ options, className, onSelectCallback, defaultValue }:
     <StyledDropDown className={className}>
       <DropDownField onClick={() => setShowOptions(!showOptions)} menuOpen={showOptions}>
         <DropDownFieldText>{selected}</DropDownFieldText>
-        <ArrowIcon src={ArrowIconSvg} menuOpen={showOptions} />
+        <ArrowIcon menuOpen={showOptions} strokeWidth="2" />
       </DropDownField>
       <OptionsWrapper show={showOptions}>
         {options.map((option) => {

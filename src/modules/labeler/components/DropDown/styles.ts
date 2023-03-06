@@ -1,5 +1,5 @@
 import styled, { css, DefaultTheme } from 'styled-components';
-
+import { ChevronDown } from 'lucide-react';
 export const StyledDropDown = styled.div`
   ${({ theme }) => css`
     width: 100%;
@@ -45,8 +45,7 @@ type ArrowIconProps = {
   menuOpen: boolean;
 };
 
-export const ArrowIcon = styled.img<ArrowIconProps>`
-  margin-left: 1rem;
+export const ArrowIcon = styled(ChevronDown)<ArrowIconProps>`
   width: 1.5rem;
   transition: transform 0.5s ease;
   ${(props) => props.menuOpen && 'transform: rotate(180deg)'}

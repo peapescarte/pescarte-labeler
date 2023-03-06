@@ -1,10 +1,13 @@
-import IconArrowRight from '../../../../assets/icons/angle-right-solid.svg';
-import IconArrowLeft from '../../../../assets/icons/angle-left-solid.svg';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useContextLabeler } from '../../providers/LabelerProvider';
-import { StyledIcon, StyledMediaControlButton, StyledMediaControlContainer } from './styles';
-
+import {
+  StyledMediaControlButton,
+  StyledMediaControlContainer,
+  StyledMediaControlCounter,
+} from './styles';
 export const LabelerMediaControl = () => {
-  const { goToNextMedia, goToPrevMedia } = useContextLabeler();
+  const { goToNextMedia, goToPrevMedia, medias, activatedMedia } = useContextLabeler();
+  const actualIndex = medias.findIndex((media) => media.id === activatedMedia?.id) + 1;
 
   const handleNextClick = () => {
     goToNextMedia();
@@ -17,10 +20,13 @@ export const LabelerMediaControl = () => {
   return (
     <StyledMediaControlContainer>
       <StyledMediaControlButton onClick={handlePrevClick} title="Ir para Mídia anterior">
-        <StyledIcon src={IconArrowLeft} alt="Icone flecha para esquerda" />
+        <ChevronLeft aria-label="flecha para esquerda" strokeWidth="1.5" />
       </StyledMediaControlButton>
+      <StyledMediaControlCounter>
+        {actualIndex} / {medias.length}
+      </StyledMediaControlCounter>
       <StyledMediaControlButton onClick={handleNextClick} title="Ir para próxima Mídia">
-        <StyledIcon src={IconArrowRight} alt="Icone flecha para direita" />
+        <ChevronRight aria-label="Icone flecha para direita" strokeWidth="1.5" />
       </StyledMediaControlButton>
     </StyledMediaControlContainer>
   );

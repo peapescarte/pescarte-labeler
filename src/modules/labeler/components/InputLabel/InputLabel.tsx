@@ -15,10 +15,11 @@ export const InputLabel: React.FC = () => {
 
     if (!activatedMedia || !isValidNewLabel(label) || selectedCategoryById === '') return;
 
-    addNewLabel({
+    addNewLabel(activatedMedia.id, {
       label,
-      category_id: selectedCategoryById,
-      media_id: activatedMedia.id,
+      category: {
+        id: selectedCategoryById,
+      },
     });
 
     setLabel('');

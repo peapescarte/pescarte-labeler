@@ -12,11 +12,11 @@ import {
 
 export const LabelerList = () => {
   const { activatedMedia, removeLabel } = useContextLabeler();
-  const { categories } = useContextLabelerData();
+  const { categories, loading } = useContextLabelerData();
   const [selectedCategory, setSelectedCategory] = useState<Category>();
 
   const tags = useMemo(
-    () => activatedMedia?.tags.filter((tag) => tag.category_id === selectedCategory?.id),
+    () => activatedMedia?.tags.filter((tag) => tag.category.id === selectedCategory?.id),
     [activatedMedia, selectedCategory],
   );
 

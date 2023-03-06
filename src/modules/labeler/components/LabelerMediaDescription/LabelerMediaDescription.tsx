@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useContextLabeler } from '../../providers/LabelerProvider';
 import { DropDown } from '../DropDown';
 import {
@@ -13,10 +13,8 @@ import {
 } from './styles';
 
 export const LabelerMediaDescription = () => {
-  const { activatedMedia } = useContextLabeler();
+  const { activatedMedia, updateNotes } = useContextLabeler();
   const [autor, setAutor] = useState('');
-  const [notes, setNotes] = useState('');
-
   return (
     <MediaDescriptionWrapper>
       <MediaDescriptionGroup>
@@ -27,24 +25,32 @@ export const LabelerMediaDescription = () => {
             options={[
               {
                 id: '1',
-                name: 'iae pofesô',
+                name: 'Tester',
               },
             ]}
           />
         </MediaDescriptionAutor>
         <MediaDescriptionData>
-          <MediaDescriptionDataText>Nome da mídia: {activatedMedia?.id}</MediaDescriptionDataText>
-          <MediaDescriptionDataText>Data: 12/05/2021</MediaDescriptionDataText>
+          <MediaDescriptionDataText>
+            Nome da mídia: {activatedMedia?.filename}
+          </MediaDescriptionDataText>
+          <MediaDescriptionDataText>Data: {activatedMedia?.filedate}</MediaDescriptionDataText>
         </MediaDescriptionData>
       </MediaDescriptionGroup>
       <MediaDescriptionGroup>
         <MediaDescriptionNotesWrapper>
           <MediaDescriptionLabel>Anotações</MediaDescriptionLabel>
-          <MediaDescriptionNotes
-            maxLength={300}
-            rows={5}
-            onBlur={(text) => setNotes(text.currentTarget.value)}
-          />
+          {activatedMedia ? (
+            <MediaDescriptionNotes
+              key={activatedMedia.id}
+              defaultValue={activatedMedia.observation}
+              maxLength={300}
+              rows={5}
+              onBlur={(text) => updateNotes(activatedMedia?.id, text.currentTarget.value)}
+            />
+          ) : (
+            <div></div>
+          )}
         </MediaDescriptionNotesWrapper>
       </MediaDescriptionGroup>
     </MediaDescriptionWrapper>

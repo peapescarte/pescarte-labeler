@@ -1,15 +1,8 @@
 import { useState } from 'react';
-import { IconPencil } from '../../../../../../assets/icons/icon-pincel';
-import IconPlus from '../../../../../../assets/icons/plus-solid.svg';
+import { Edit, X } from 'lucide-react';
 import { useContextLabeler } from '../../../../providers/LabelerProvider';
 import { LabelEditable } from '../LabelEditable';
-import {
-  StyledButton,
-  StyledIcon,
-  StyledIconPlus,
-  StyledListItem,
-  StyledListItemTools,
-} from './styles';
+import { StyledButton, StyledListItem, StyledListItemTools } from './styles';
 
 type LabelerListItem = {
   children: string;
@@ -44,10 +37,10 @@ export const LabelerListItem = ({ children, onRemoveCallback }: LabelerListItem)
       />
       <StyledListItemTools>
         <StyledButton onClick={handleEditClick}>
-          <IconPencil />
+          <Edit aria-label="clique para editar" strokeWidth="2" />
         </StyledButton>
         <StyledButton onClick={onRemoveCallback}>
-          <StyledIconPlus src={IconPlus} />
+          <X aria-label="clique para remover" strokeWidth="2" />
         </StyledButton>
       </StyledListItemTools>
     </StyledListItem>

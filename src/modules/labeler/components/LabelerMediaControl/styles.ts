@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 export const StyledMediaControlContainer = styled.div`
   display: flex;
@@ -10,11 +10,15 @@ export const StyledMediaControlButton = styled.button`
   border-radius: 0;
   border: none;
   background-color: transparent;
-  padding: 0.5rem 1rem;
   cursor: pointer;
 `;
 
-export const StyledIcon = styled.img`
-  z-index: 2;
-  width: 1.5rem;
+export const StyledMediaControlCounter = styled.span`
+  ${({ theme }) => css`
+    width: 7rem;
+    font-size: ${theme.fontSizes.regular};
+    color: ${theme.colors.neutra80};
+    display: flex;
+    justify-content: center;
+  `}
 `;

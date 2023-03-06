@@ -3,17 +3,23 @@ import { LabelerList } from '../../modules/labeler/components/LabelerList';
 import { LabelerMediaControl } from '../../modules/labeler/components/LabelerMediaControl';
 import { LabelerMediaDescription } from '../../modules/labeler/components/LabelerMediaDescription';
 import { LabelerMediaViwer } from '../../modules/labeler/components/LabelerMediaViwer';
+import { MediaSave } from '../../modules/labeler/components/MediaSave';
+import { SaveButton } from '../../modules/labeler/components/MediaSave/components/SaveButton';
 import { LabelerDataProvider } from '../../modules/labeler/providers/LabelerDataProvider';
 import { LabelerProvider } from '../../modules/labeler/providers/LabelerProvider';
 import {
   ControllersWrapper,
-  StyledAside,
+  FooterPartners,
+  PartnersDisclaimer,
+  PartnersImage,
+  AsideList,
   StyledContainer,
   StyledFooter,
   StyledHeader,
   StyledLogo,
   StyledMain,
-  StyledSection,
+  SectionDescription,
+  AsideSave,
 } from './styles';
 
 const HomePage = () => {
@@ -31,15 +37,29 @@ const HomePage = () => {
               <LabelerMediaControl />
             </ControllersWrapper>
           </StyledMain>
-          <StyledAside>
+          <AsideList>
             <LabelerList />
-          </StyledAside>
-          <StyledSection>
+          </AsideList>
+          <SectionDescription>
             <LabelerMediaDescription />
-          </StyledSection>
+          </SectionDescription>
+          <AsideSave>
+            <MediaSave />
+          </AsideSave>
         </LabelerProvider>
       </LabelerDataProvider>
-      <StyledFooter>a</StyledFooter>
+      <StyledFooter>
+        <FooterPartners>
+          <PartnersImage src="images/ibama.png" />
+          <PartnersImage src="images/uenf.png" />
+          <PartnersImage src="images/petrobras.png" />
+          <PartnersImage src="images/ipead.png" />
+        </FooterPartners>
+        <PartnersDisclaimer>
+          A realização do Projeto Pescarte é uma medida de mitigação exigida
+          <br /> pelo licenciamento ambiental federal, conduzido pelo IBAMA.
+        </PartnersDisclaimer>
+      </StyledFooter>
     </StyledContainer>
   );
 };
