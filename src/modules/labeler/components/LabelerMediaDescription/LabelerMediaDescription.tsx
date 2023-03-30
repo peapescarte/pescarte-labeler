@@ -1,10 +1,14 @@
-import { useState, useMemo } from 'react';
+import { useMemo } from 'react';
+import Skeleton from 'react-loading-skeleton';
+import { Author } from '../../interfaces/author';
+import { useContextLabelerData } from '../../providers/LabelerDataProvider';
 import { useContextLabeler } from '../../providers/LabelerProvider';
-import { DropDown } from '../DropDown';
+import { SearchField } from '../SearchField';
+import { option } from '../SearchField/SearchField';
 import {
   MediaDescriptionAutor,
-  MediaDescriptionData,
   MediaDescriptionDataText,
+  MediaDescriptionDataTextHeader,
   MediaDescriptionGroup,
   MediaDescriptionLabel,
   MediaDescriptionNotes,
@@ -13,30 +17,52 @@ import {
 } from './styles';
 
 export const LabelerMediaDescription = () => {
-  const { activatedMedia, updateNotes } = useContextLabeler();
-  const [autor, setAutor] = useState('');
+  const { activatedMedia, updateNotes, updateAuthor } = useContextLabeler();
+  const { fetchLoading, authors, updateLoading } = useContextLabelerData();
+
+  const isLoading = useMemo(() => fetchLoading || !activatedMedia, [fetchLoading, activatedMedia]);
+
+  const joinAuthorNames = (author: Author) =>
+    [author.firstName, author.middleName, author.lastName].join(' ');
+
+  const autor = useMemo(() => {
+    if (!activatedMedia) return '';
+
+    return joinAuthorNames(activatedMedia.author);
+  }, [activatedMedia]);
+
+  const options: option[] = useMemo(
+    () => authors.map((author) => ({ id: author.id, value: joinAuthorNames(author) })),
+    [authors],
+  );
+
+  const handleAuthorChange = (selected: option) => {
+    const selectedAuthor = authors.find((author) => author.id === selected.id);
+
+    if (!selectedAuthor) return;
+
+    updateAuthor(selectedAuthor);
+  };
+
   return (
     <MediaDescriptionWrapper>
-      <MediaDescriptionGroup>
-        <MediaDescriptionAutor>
-          <MediaDescriptionLabel>Autor</MediaDescriptionLabel>
-          <DropDown
-            onSelectCallback={(option) => setAutor(option.id)}
-            options={[
-              {
-                id: '1',
-                name: 'Tester',
-              },
-            ]}
+      <MediaDescriptionDataText>
+        <MediaDescriptionDataTextHeader>Data:</MediaDescriptionDataTextHeader>
+        {activatedMedia?.filedate || <Skeleton width={50} />}
+      </MediaDescriptionDataText>
+      <MediaDescriptionAutor>
+        <MediaDescriptionLabel>Autor: </MediaDescriptionLabel>
+        {isLoading ? (
+          <Skeleton width={200} height={40} />
+        ) : (
+          <SearchField
+            defaultValue={autor}
+            options={options}
+            onSelectCallback={handleAuthorChange}
+            disabled={updateLoading}
           />
-        </MediaDescriptionAutor>
-        <MediaDescriptionData>
-          <MediaDescriptionDataText>
-            Nome da mídia: {activatedMedia?.filename}
-          </MediaDescriptionDataText>
-          <MediaDescriptionDataText>Data: {activatedMedia?.filedate}</MediaDescriptionDataText>
-        </MediaDescriptionData>
-      </MediaDescriptionGroup>
+        )}
+      </MediaDescriptionAutor>
       <MediaDescriptionGroup>
         <MediaDescriptionNotesWrapper>
           <MediaDescriptionLabel>Anotações</MediaDescriptionLabel>
@@ -46,10 +72,11 @@ export const LabelerMediaDescription = () => {
               defaultValue={activatedMedia.observation}
               maxLength={300}
               rows={5}
-              onBlur={(text) => updateNotes(activatedMedia?.id, text.currentTarget.value)}
+              onBlur={(text) => updateNotes(text.currentTarget.value)}
+              disabled={updateLoading}
             />
           ) : (
-            <div></div>
+            <Skeleton width="100%" height={70} />
           )}
         </MediaDescriptionNotesWrapper>
       </MediaDescriptionGroup>

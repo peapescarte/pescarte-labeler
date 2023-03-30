@@ -1,10 +1,11 @@
 const GET_AUTHORS = /* GraphQL */ `
   query GetAuthors {
-    users {
+    listUsers {
       firstName
       middleName
       lastName
       id
+      role
     }
   }
 `;

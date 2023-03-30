@@ -1,3 +1,4 @@
+import equal from 'deep-equal';
 import {
   createContext,
   ReactNode,
@@ -7,22 +8,25 @@ import {
   useMemo,
   useState,
 } from 'react';
+import { toast } from 'react-toastify';
 import { v4 as uuidv4 } from 'uuid';
 import { Media, Tag } from '../interfaces';
+import { Author } from '../interfaces/author';
 import { useContextLabelerData } from './LabelerDataProvider';
-
 interface LabelerProviderProps {
+  initialMediaId?: string;
   children: ReactNode;
 }
 
 interface LabelerContextProps {
   activatedMedia: Media | undefined;
-  addNewLabel: (mediaId: string, tag: Omit<Tag, 'id'>) => void;
-  updateNotes: (mediaId: string, annotations: string) => void;
+  addNewLabel: (tag: Omit<Tag, 'id'>) => boolean;
+  updateNotes: (annotations: string) => void;
+  updateAuthor: (author: Author) => void;
   goToNextMedia: () => void;
   goToPrevMedia: () => void;
   removeLabel: (id: string) => void;
-  medias: Media[];
+  saveMedia: () => void;
 }
 
 const LabelerContext = createContext<LabelerContextProps | undefined>(undefined);
@@ -31,37 +35,56 @@ export function LabelerProvider({ children }: LabelerProviderProps): JSX.Element
   const { medias, updateMedia } = useContextLabelerData();
   const [activatedMedia, setActivatedMedia] = useState<Media>();
   const [activatedMediaIndex, setActivatedMediaIndex] = useState(0);
-
   console.log(activatedMedia);
-
   const addNewLabel = useCallback(
-    (mediaId: string, tag: Omit<Tag, 'id'>) => {
-      if (!activatedMedia) return;
+    (tag: Omit<Tag, 'id'>) => {
+      if (!activatedMedia) return false;
 
       const repeated = activatedMedia.tags.find((item) => item.label === tag.label);
       if (repeated) {
-        alert('label repetida');
-        return;
+        toast('Tag já inserida.', {
+          type: 'warning',
+        });
+        return false;
       }
 
-      // chamada backend para adicionar uma nova tag, temporariamente código a baixo
       const newTag: Tag = { ...tag, id: uuidv4() };
 
-      setActivatedMedia({
-        ...activatedMedia,
-        tags: [...activatedMedia.tags, newTag],
+      setActivatedMedia((current) => {
+        if (!current) return current;
+        return { ...current, tags: [...current.tags, newTag] };
       });
+
+      return true;
     },
     [activatedMedia, setActivatedMedia],
   );
 
   const updateNotes = useCallback(
-    (mediaId: string, annotations: string) => {
+    (annotations: string) => {
       if (!activatedMedia) return;
 
-      setActivatedMedia({
-        ...activatedMedia,
-        observation: annotations,
+      setActivatedMedia((current) => {
+        if (!current) return current;
+        return {
+          ...current,
+          observation: annotations,
+        };
+      });
+    },
+    [activatedMedia, setActivatedMedia],
+  );
+
+  const updateAuthor = useCallback(
+    (newAuthor: Author) => {
+      if (!activatedMedia) return;
+
+      setActivatedMedia((current) => {
+        if (!current) return current;
+        return {
+          ...current,
+          author: newAuthor,
+        };
       });
     },
     [activatedMedia, setActivatedMedia],
@@ -71,11 +94,14 @@ export function LabelerProvider({ children }: LabelerProviderProps): JSX.Element
     (id: string) => {
       if (!activatedMedia) return;
 
-      const tagRemoved = activatedMedia.tags.filter((item) => item.id !== id);
+      setActivatedMedia((current) => {
+        if (!current) return current;
+        const tagRemoved = current.tags.filter((item) => item.id !== id);
 
-      setActivatedMedia({
-        ...activatedMedia,
-        tags: tagRemoved,
+        return {
+          ...current,
+          tags: tagRemoved,
+        };
       });
     },
     [activatedMedia, setActivatedMedia],
@@ -84,28 +110,40 @@ export function LabelerProvider({ children }: LabelerProviderProps): JSX.Element
   const saveMedia = useCallback(async () => {
     if (!activatedMedia) return;
 
+    if (equal(activatedMedia, medias[activatedMediaIndex])) return;
+
     await updateMedia(activatedMedia);
-  }, [activatedMedia, updateMedia]);
+  }, [activatedMedia, updateMedia, medias]);
 
   const goToNextMedia = useCallback(async () => {
     if (!activatedMedia) return;
 
-    await saveMedia();
+    if (!equal(activatedMedia, medias[activatedMediaIndex])) {
+      toast('Salve as modificações para continuar.', {
+        type: 'warning',
+      });
+      return;
+    }
 
     const NextIndex = activatedMediaIndex + 1 >= medias.length ? 0 : activatedMediaIndex + 1;
 
     setActivatedMediaIndex(NextIndex);
-  }, [activatedMedia]);
+  }, [activatedMedia, medias]);
 
   const goToPrevMedia = useCallback(async () => {
     if (!activatedMedia) return;
 
-    await saveMedia();
+    if (!equal(activatedMedia, medias[activatedMediaIndex])) {
+      toast('Salve as modificações para continuar.', {
+        type: 'warning',
+      });
+      return;
+    }
 
     const NextIndex = activatedMediaIndex - 1 < 0 ? medias.length - 1 : activatedMediaIndex - 1;
 
     setActivatedMediaIndex(NextIndex);
-  }, [activatedMedia]);
+  }, [activatedMedia, medias]);
 
   useEffect(() => {
     if (!medias.length) return;
@@ -119,15 +157,25 @@ export function LabelerProvider({ children }: LabelerProviderProps): JSX.Element
 
   const values = useMemo(
     () => ({
-      medias,
       activatedMedia,
       addNewLabel,
       updateNotes,
       removeLabel,
       goToNextMedia,
       goToPrevMedia,
+      saveMedia,
+      updateAuthor,
     }),
-    [medias, activatedMedia, addNewLabel, updateNotes, removeLabel, goToNextMedia, goToPrevMedia],
+    [
+      activatedMedia,
+      addNewLabel,
+      updateNotes,
+      removeLabel,
+      goToNextMedia,
+      goToPrevMedia,
+      saveMedia,
+      updateAuthor,
+    ],
   );
 
   return <LabelerContext.Provider value={values}>{children}</LabelerContext.Provider>;

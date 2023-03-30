@@ -1,27 +1,25 @@
-import React, { useEffect, useState } from 'react';
-import { useContextLabelerData } from '../../providers/LabelerDataProvider';
-import { useContextLabeler } from '../../providers/LabelerProvider';
-import { Input } from './components';
-import { InputLabelForm, StyledDropDown, StyledSubmitButton } from './styles';
+import React, { useState } from 'react';
+import { Input } from '../../../../components/Input';
+import { normalizeString, sanitizeString } from '../../../../helpers/string';
+import { InputLabelForm, StyledSubmitButton } from './styles';
 
-export const InputLabel: React.FC = () => {
+type InputLabelProps = {
+  onSubmit: (tag: string) => void;
+  disabled?: boolean;
+};
+
+export const InputLabel = ({ onSubmit, disabled }: InputLabelProps) => {
   const [label, setLabel] = useState('');
-  const { addNewLabel, activatedMedia } = useContextLabeler();
-  const { categories } = useContextLabelerData();
-  const [selectedCategoryById, setSelectedCategoryById] = useState('');
+
+  const handleInputLabel = (value: string) => {
+    setLabel(normalizeString(sanitizeString(value)));
+  };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!isValidNewLabel(label) || disabled) return;
 
-    if (!activatedMedia || !isValidNewLabel(label) || selectedCategoryById === '') return;
-
-    addNewLabel(activatedMedia.id, {
-      label,
-      category: {
-        id: selectedCategoryById,
-      },
-    });
-
+    onSubmit(label);
     setLabel('');
   };
 
@@ -33,13 +31,14 @@ export const InputLabel: React.FC = () => {
 
   return (
     <InputLabelForm onSubmit={(e) => handleSubmit(e)}>
-      <StyledDropDown
-        options={categories}
-        onSelectCallback={(category) => setSelectedCategoryById(category.id)}
-        defaultValue="selecione..."
+      <Input
+        maxLength={15}
+        value={label}
+        onChangeCallback={(val) => handleInputLabel(val)}
+        placeholder="Insira uma tag..."
+        disabled={disabled}
       />
-      <Input value={label} onChangeCallback={(val) => setLabel(val)} placeholder="Label" />
-      <StyledSubmitButton type="submit" title="Adicionar nova etiqueta" />
+      <StyledSubmitButton type="submit" title="Adicionar nova etiqueta" disabled={disabled} />
     </InputLabelForm>
   );
 };

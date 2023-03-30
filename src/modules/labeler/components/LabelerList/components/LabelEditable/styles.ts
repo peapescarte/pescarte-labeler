@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import { Input } from '../../../InputLabel/components';
+import { Input } from '../../../../../../components/Input';
 
 export const StyledLabel = styled.span`
   ${({ theme }) => css`

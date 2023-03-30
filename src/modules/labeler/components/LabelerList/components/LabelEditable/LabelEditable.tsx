@@ -17,6 +17,7 @@ export const LabelEditable = ({ editMode, label, onChangeCallback }: LabelEditab
 
   function handleLabelChange(newLabel: string) {
     onChangeCallback(newLabel);
+    setLabelValue(label);
   }
 
   return editMode ? (

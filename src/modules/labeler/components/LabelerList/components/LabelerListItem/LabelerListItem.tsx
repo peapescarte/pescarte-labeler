@@ -1,15 +1,19 @@
-import { useState } from 'react';
 import { Edit, X } from 'lucide-react';
-import { useContextLabeler } from '../../../../providers/LabelerProvider';
+import { useState } from 'react';
 import { LabelEditable } from '../LabelEditable';
 import { StyledButton, StyledListItem, StyledListItemTools } from './styles';
 
 type LabelerListItem = {
   children: string;
   onRemoveCallback: () => void;
+  onEditCallback: (newLabel: string) => void;
 };
 
-export const LabelerListItem = ({ children, onRemoveCallback }: LabelerListItem) => {
+export const LabelerListItem = ({
+  children,
+  onRemoveCallback,
+  onEditCallback,
+}: LabelerListItem) => {
   const [isEditmode, SetIsEditMode] = useState(false);
 
   const handleEditClick = () => {
@@ -25,7 +29,7 @@ export const LabelerListItem = ({ children, onRemoveCallback }: LabelerListItem)
       return;
     }
 
-    console.log(newLabel);
+    onEditCallback(newLabel);
   };
 
   return (
@@ -36,10 +40,10 @@ export const LabelerListItem = ({ children, onRemoveCallback }: LabelerListItem)
         onChangeCallback={(newLabel) => handleEditReturn(newLabel)}
       />
       <StyledListItemTools>
-        <StyledButton onClick={handleEditClick}>
+        <StyledButton onClick={handleEditClick} title="clique para editar">
           <Edit aria-label="clique para editar" strokeWidth="2" />
         </StyledButton>
-        <StyledButton onClick={onRemoveCallback}>
+        <StyledButton onClick={onRemoveCallback} title="clique para remover">
           <X aria-label="clique para remover" strokeWidth="2" />
         </StyledButton>
       </StyledListItemTools>

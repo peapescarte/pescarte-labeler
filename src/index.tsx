@@ -1,17 +1,21 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
+import { SkeletonTheme } from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 import App from './App';
-import reportWebVitals from './reportWebVitals';
-import Theme from './Theme';
+import './index.css';
 import { startMSW } from './mocks/browser';
+import reportWebVitals from './reportWebVitals';
+import Theme, { theme } from './Theme';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 startMSW();
 root.render(
   <React.StrictMode>
     <Theme>
-      <App />
+      <SkeletonTheme baseColor={theme.colors.neutra5} highlightColor={theme.colors.white}>
+        <App />
+      </SkeletonTheme>
     </Theme>
   </React.StrictMode>,
 );

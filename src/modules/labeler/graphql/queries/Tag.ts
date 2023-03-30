@@ -1,8 +1,21 @@
-export const CREATE_TAGS = /* GraphQL */ `
+export const CREATE_TAG = /* GraphQL */ `
   mutation CreateTag($label: String!, $categoriaId: String!) {
     createTag(label: $label, categoriaId: $categoriaId) {
       id
       label
+    }
+  }
+`;
+
+export const CREATE_TAGS = /* GraphQL */ `
+  mutation CreateTags($tags: [CreateTagInput]) {
+    createTags(input: $tags) {
+      id
+      label
+      categoria {
+        id
+        name
+      }
     }
   }
 `;

@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { DropDown } from '../DropDown';
 
 export const StyledLabelerList = styled.div`
@@ -32,4 +32,18 @@ export const StyledLabelerListItens = styled.div`
   max-height: 100%;
   overflow-y: scroll;
   padding-left: 0.8rem;
+`;
+
+export const InputLabelWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+`;
+
+export const Label = styled.h5`
+  ${({ theme }) => css`
+    font-size: ${theme.fontSizes.regularMedium};
+    font-weight: bold;
+    margin-bottom: 0.4rem;
+  `}
 `;

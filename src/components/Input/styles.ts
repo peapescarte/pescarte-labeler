@@ -5,7 +5,6 @@ export const StyledInputLabel = styled.input`
     height: 4rem;
     border: 1px solid ${theme.colors.border};
     border-radius: 4px;
-    margin-left: 1.6rem;
     padding-left: 0.5rem;
   `}
 `;

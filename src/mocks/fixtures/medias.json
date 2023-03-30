@@ -6,7 +6,9 @@
       "id": "6e0b3352-d626-46fe-a429-98e1f3eb1e52",
       "type": "image/png",
       "observation": "",
+      "sensible": true,
       "link": "https://drive.google.com/uc?export=view&id=1g_BdJi-TMgLJ--hOUb4wX9nd9dBSUcrR",
+      "altText": "Imagem teste pescarte 1",
       "author": {
         "firstName": "fulano",
         "middleName": "da",
@@ -37,7 +39,9 @@
       "id": "ddf212d1-aa13-40a0-bf08-aec7d35db62a",
       "type": "image/png",
       "link": "https://drive.google.com/uc?export=view&id=1YqVklE01-XPX-6iAO0iYie5acOCk0rhk",
+      "altText": "Imagem teste pescarte 2",
       "observation": "Anotação mock",
+      "sensible": false,
       "author": {
         "firstName": "beltrano",
         "middleName": "dos",
@@ -62,7 +66,7 @@
         },
         {
           "id": "10ce4b7a-2349-423d-a76d-778e616a92ef",
-          "label": "Macaé",
+          "label": "macae",
           "category": {
             "id": "e3a968b3-cb5b-4aac-8980-10820cb36edd",
             "name": "local"

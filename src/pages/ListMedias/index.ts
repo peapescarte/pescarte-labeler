@@ -1,0 +1,1 @@
+export { ListMedias } from './ListMedias';

@@ -1,0 +1,39 @@
+{
+  "listUsers": [
+    {
+      "firstName": "Zoey",
+      "id": "_157asd-qSN7YrkDvv5Xd",
+      "lastName": "Pessanha",
+      "middleName": "De Souza",
+      "role": "PESQUISADOR"
+    },
+    {
+      "firstName": "Annabell",
+      "id": "d1Z-MJwywrk89EJLDyNgL",
+      "lastName": "Tamariz",
+      "middleName": "Del Real",
+      "role": "PESQUISADOR"
+    },
+    {
+      "firstName": "Gisele",
+      "id": "-KFy-L-lt36HMAjeCTuG_",
+      "lastName": "Bastos",
+      "middleName": "Braga",
+      "role": "PESQUISADOR"
+    },
+    {
+      "firstName": "Geraldo",
+      "id": "yCKNma8qm5O61Gxz7v1Yp",
+      "lastName": "Timóteo",
+      "middleName": null,
+      "role": "PESQUISADOR"
+    },
+    {
+      "firstName": "Sahudy",
+      "id": "7hg7_0mSbECyJ1jcbx64G",
+      "lastName": "González",
+      "middleName": "Montenegro",
+      "role": "PESQUISADOR"
+    }
+  ]
+}

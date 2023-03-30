@@ -1,7 +1,12 @@
+export type UpdateTag = {
+  label: string;
+  categoriaId: string;
+};
+
 export type Tag = {
   id: string;
   label: string;
-  category: {
+  categoria: {
     id: string;
   };
 };

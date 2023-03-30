@@ -6,15 +6,19 @@ export const GET_MEDIAS = /* GraphQL */ `
       id
       type
       link
+      altText
       observation
+      sensible
       author {
+        id
         firstName
+        middleName
         lastName
       }
       tags {
         label
         id
-        category {
+        categoria {
           id
           name
         }
@@ -32,22 +36,26 @@ export const CREATE_MEDIA = /* GraphQL */ `
 `;
 
 export const UPDATE_MEDIA = /* GraphQL */ `
-  mutation UpdateMedia($input: UpdateMidiaInput!) {
-    updateMidia(input: $input) {
+  mutation UpdateMedia($media: UpdateMidiaInput) {
+    updateMidia(input: $media) {
       filename
       filedate
       id
       type
       link
+      altText
       observation
+      sensible
       author {
+        id
         firstName
+        middleName
         lastName
       }
       tags {
         label
         id
-        category {
+        categoria {
           id
           name
         }

@@ -1,6 +1,5 @@
-export type User = {
+export type Author = {
   id: string;
-  role: string; // to-do: trocar para enum
   firstName: string;
   lastName: string;
   middleName: string;

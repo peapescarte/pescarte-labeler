@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react';
-import { StyledImage, StyledImageViwer } from './styles';
+import Skeleton from 'react-loading-skeleton';
+import { ImageLoadingText, ImageLoadingWrapper, StyledImage, StyledImageViwer } from './styles';
 
 type ImageViwerProps = {
   src: string;
   alt: string;
+  isSensive: boolean;
 };
 
-export const ImageViwer = ({ src, alt }: ImageViwerProps) => {
+export const ImageViwer = ({ src, alt, isSensive }: ImageViwerProps) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -15,8 +17,19 @@ export const ImageViwer = ({ src, alt }: ImageViwerProps) => {
 
   return (
     <StyledImageViwer>
-      {isLoading && <p>Carregando imagem..</p>}
-      <StyledImage src={src} alt={alt} onLoad={() => setIsLoading(false)} isLoading={isLoading} />
+      {isLoading && (
+        <ImageLoadingWrapper>
+          <Skeleton width="100%" height="100%" />
+          <ImageLoadingText>Carregando imagem..</ImageLoadingText>
+        </ImageLoadingWrapper>
+      )}
+      <StyledImage
+        isBlurred={isSensive}
+        src={src}
+        alt={alt}
+        onLoad={() => setIsLoading(false)}
+        isLoading={isLoading}
+      />
     </StyledImageViwer>
   );
 };

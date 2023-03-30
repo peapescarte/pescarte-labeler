@@ -8,17 +8,11 @@ export const StyledContainer = styled.div`
   grid-template-areas: 'main side';
 `;
 
-export const StyledHeader = styled.header`
+export const LabelerPageHeader = styled.div`
   grid-column-start: main;
   grid-column-end: side;
   grid-row: 1;
-  height: 5rem;
-  margin: 1.2rem 0;
-  display: flex;
-  align-items: center;
 `;
-
-export const StyledLogo = styled.img``;
 
 export const StyledMain = styled.main`
   height: calc(100vh - 7.5rem);
@@ -28,6 +22,9 @@ export const StyledMain = styled.main`
   grid-row: 2;
   display: flex;
   flex-direction: column;
+  @media screen and (min-width: 1600px) {
+    height: auto;
+  }
 `;
 
 export const StyledAside = styled.aside`
@@ -39,6 +36,9 @@ export const AsideList = styled(StyledAside)`
   grid-row: 2;
   margin-left: 1rem;
   height: calc(100vh - 7.5rem);
+  @media screen and (min-width: 1600px) {
+    height: auto;
+  }
 `;
 
 export const StyledSection = styled.section`
@@ -89,9 +89,9 @@ export const PartnersDisclaimer = styled.p`
 `;
 
 export const ControllersWrapper = styled.div`
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: 2rem;
-  margin-bottom: 1rem;
+  margin: 0.8rem 0rem;
 `;

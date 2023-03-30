@@ -1,13 +1,25 @@
+import { Author } from './author';
 import { Tag } from './tag';
-import { User } from './user';
 
-export type Media = {
+export type MediaType = 'DOCUMENTO' | 'IMAGEM' | 'VIDEO';
+
+type MediaBase = {
   filename: string;
   filedate: string;
   id: string;
-  type: string;
   link: string;
+  altText: string;
   observation: string;
+  type: string;
+  sensible: boolean;
+};
+
+export type Media = MediaBase & {
+  author: Author;
   tags: Tag[];
-  author: User;
+};
+
+export type UpdateMedia = MediaBase & {
+  authorId: string;
+  tags: string[];
 };

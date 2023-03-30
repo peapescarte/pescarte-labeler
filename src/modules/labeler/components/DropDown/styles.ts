@@ -1,7 +1,8 @@
-import styled, { css, DefaultTheme } from 'styled-components';
 import { ChevronDown } from 'lucide-react';
+import styled, { css } from 'styled-components';
 export const StyledDropDown = styled.div`
   ${({ theme }) => css`
+    max-width: 30rem;
     width: 100%;
     min-width: fit-content;
     position: relative;
@@ -38,7 +39,9 @@ export const DropDownField = styled.div<DropDownFieldProps>`
 `;
 
 export const DropDownFieldText = styled.span`
-  font-size: 1.6rem;
+  ${({ theme }) => css`
+    font-size: ${theme.fontSizes.regular};
+  `}
 `;
 
 type ArrowIconProps = {
@@ -47,6 +50,7 @@ type ArrowIconProps = {
 
 export const ArrowIcon = styled(ChevronDown)<ArrowIconProps>`
   width: 1.5rem;
+  margin-left: 0.4rem;
   transition: transform 0.5s ease;
   ${(props) => props.menuOpen && 'transform: rotate(180deg)'}
 `;
@@ -63,6 +67,7 @@ export const OptionsWrapper = styled.ul<OptionsWrapperProps>`
     z-index: ${theme.zIndex.dropdown};
     display: ${show ? 'block' : 'none'};
 
+    max-width: 30rem;
     width: 100%;
     min-width: fit-content;
     border: 1.5px solid ${theme.colors.border};

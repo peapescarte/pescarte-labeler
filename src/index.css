@@ -41,3 +41,7 @@ a {
     background: black;
   }
 }
+
+:root {
+  --toastify-font-family: 'Work Sans';
+}
