@@ -1,46 +1,68 @@
-# Getting Started with Create React App
+# Ferramenta catalogação mídias PEA Pescarte
+Pescarte-labeler é um projeto com objetivo de facilitar a catalogação de mídias. Em sua interface é exibida uma mídia a ser catalogada e em uma área ao lado é possivel adicionar, remover e editar etiquetas. As etiquetas podem ser adicionadas em diferentes categorias predefinidas. Logo abaixo da mídia é possivel navegar entre as mídias e ver informações como nome e data. Outras informações como autor e descrição também podem ser editadas.
+Toda informação salva é enviada para um banco de dados, para desenvolvimento desse projeto utilizamos [Api pescarte](https://github.com/peapescarte/pescarte-api).
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Esse repositório é do front-end que utiliza como tecnologias web, React.js, Typescript, Styled-components, MSW e graphql.
 
-## Available Scripts
+## Ambiente de Desenvolvimento local
 
-In the project directory, you can run:
+| Requisitos                      | versão     |
+| ------------------------------- | ---------- |
+| [git](https://git-scm.com/)     | `v2.40.0`  |
+| [nodejs](https://nodejs.org/en) | `v18.14.2` |
 
-### `npm start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Para instalar as dependencias, dentro do repositório execute:
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+```sh dark
+npm install
+```
 
-### `npm test`
+### Executando pela primeira vez
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Algumas configurações são necessárias.
 
-### `npm run build`
+Copie de .env.example o exemplo de variaveis de ambientes a serem configuradas.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Crie um arquivo chamado .env.development com essas chaves e insira as informações
+REACT_APP_MODE="" (a variavel que descreve o ambiente pode ser, 'development' e 'homologation')
+REACT_APP_API_BASE_URL="" (a variavel que descreve qual url para api que consumira os dados)
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Para levantar o servidor:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```sh dark
+npm run dev
+```
 
-### `npm run eject`
+Para analisar a estrutura do código:
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+```sh dark
+npm run lint
+```
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Para rodar um fix de possiveis erros:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+```sh dark
+npm run lint:fix
+```
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+## Estrutura do projeto
+/public - Se encontram arquivos disponibilizados publicamente como as logos dos apoiadores do projeto
+/src - Armazena todo código do projeto
 
-## Learn More
+dentro de /src
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+/components - diretório dos componentes globais que são reutilizados no projeto.
+/graphql - configura o cliente graphql do projeto e chamadas globais.
+/helpers - scripts de rotina.
+/interfaces - interfaces typescript que são utilizadas em diversas partes do projeto.
+/mocks - diretório de configuração do mock utilizando MSW (https://mswjs.io/).
+/modules - modulos do projeto, aqui se encontram os componentes de alto nivel.
+/pages - diretório de paginas.
+/routes - configuração de rotas.
+/service - services que auxiliam nas chamadas http.
+index.tsx - arquivo raiz.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Gostaria de contribuir com o projeto?
+
+Leia nosso [documento de guia para contribuição](./CONTRIBUTING.md)
