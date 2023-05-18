@@ -14,7 +14,7 @@ export const StyledImage = styled.img<StyledImageProps>`
   ${({ isLoading, isBlurred }) => css`
     width: 100%;
     height: 100%;
-    visibility: ${isLoading ? 'hidden' : 'visible'};
+    display: ${isLoading ? 'none' : 'block'};
     filter: ${isBlurred ? 'blur(5px)' : 'blur(0px)'};
   `}
 `;

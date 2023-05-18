@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { normalizeString } from '../../../../helpers/string';
 import {
   ArrowIcon,
@@ -17,16 +17,22 @@ export type option = {
 
 type SearchFieldProps = {
   options: option[];
-  defaultValue: string;
+  defaultValue?: string;
   onSelectCallback: (selected: option) => void;
   disabled?: boolean;
+  withCreation?: boolean;
+  maxLength?: number;
+  placeholder?: string;
 };
 
 export const SearchField = ({
   options,
-  defaultValue,
+  defaultValue = '',
   onSelectCallback,
   disabled,
+  withCreation = false,
+  maxLength,
+  placeholder,
 }: SearchFieldProps) => {
   const [search, setSearch] = useState(defaultValue);
   const [selected, setSelected] = useState(defaultValue);
@@ -53,6 +59,11 @@ export const SearchField = ({
     setOpenList(true);
   };
 
+  useEffect(() => {
+    setSearch(defaultValue);
+    setSelected(defaultValue);
+  }, [defaultValue]);
+
   const list = useMemo(
     () =>
       options
@@ -75,6 +86,8 @@ export const SearchField = ({
           onChange={(event) => handleOnChange(event)}
           value={search}
           disabled={disabled}
+          maxLength={maxLength}
+          placeholder={placeholder}
         />
         <ArrowIcon menuOpen={openList} strokeWidth="2" />
       </SearchFieldInputWrapper>
@@ -85,6 +98,14 @@ export const SearchField = ({
           </SearchFieldListItem>
         ))}
         {list.length > 5 && <SearchFieldExtraItem key={'...'}>...</SearchFieldExtraItem>}
+        {list.length === 0 && withCreation && (
+          <SearchFieldListItem
+            key={'create'}
+            onMouseDown={() => handleSelect({ id: 'creating', value: search })}
+          >
+            {`Criar: "${search}"`}
+          </SearchFieldListItem>
+        )}
         {list.length === 0 && (
           <SearchFieldExtraItem key={'no-found'}>Nenhum valor encontrado</SearchFieldExtraItem>
         )}

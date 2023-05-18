@@ -4,6 +4,7 @@ import { SubmitButton } from './components';
 export const InputLabelForm = styled.form`
   display: flex;
   align-items: center;
+  width: 100%;
 `;
 
 export const StyledSubmitButton = styled(SubmitButton)`

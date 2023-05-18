@@ -16,7 +16,7 @@ export const LabelerMediaViwer = () => {
       ) : (
         <MediaLoadingWrapper>
           <Skeleton width="100%" height="100%" />
-          <MediaLoadingText>Buscando mídia..</MediaLoadingText>
+          <MediaLoadingText>Buscando dados..</MediaLoadingText>
         </MediaLoadingWrapper>
       )}
     </MediaViwerWrapper>

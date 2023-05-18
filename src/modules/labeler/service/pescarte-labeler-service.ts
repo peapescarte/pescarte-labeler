@@ -2,7 +2,7 @@ import getGraphQLClient from '../../../graphql/client';
 import GET_AUTHORS from '../graphql/queries/Author';
 import GET_CATEGORIES from '../graphql/queries/Category';
 import { GET_MEDIAS, UPDATE_MEDIA } from '../graphql/queries/Media';
-import { CREATE_TAG, CREATE_TAGS } from '../graphql/queries/Tag';
+import { CREATE_TAG, CREATE_TAGS, GET_TAGS } from '../graphql/queries/Tag';
 import { Category, Media, Tag } from '../interfaces';
 import { Author } from '../interfaces/author';
 import { UpdateMedia } from '../interfaces/media';
@@ -37,11 +37,16 @@ export class PescarteLabelerService {
     return listUsers;
   }
 
-  async updateMedia(media: UpdateMedia): Promise<Media> {
-    console.log('updated media: ', media);
-    const data = await this._client.request(UPDATE_MEDIA, { media });
+  async getTags(): Promise<Tag[]> {
+    const { listTags } = await this._client.request(GET_TAGS);
 
-    return data;
+    return listTags;
+  }
+
+  async updateMedia(media: UpdateMedia): Promise<Media> {
+    const { updateMidia } = await this._client.request(UPDATE_MEDIA, { media });
+
+    return updateMidia;
   }
 
   async createTag(tag: Tag): Promise<Tag> {

@@ -8,7 +8,8 @@ import {
   StyledMediaControlCounter,
 } from './styles';
 export const LabelerMediaControl = () => {
-  const { goToNextMedia, goToPrevMedia, activatedMedia, saveMedia } = useContextLabeler();
+  const { goToNextMedia, goToPrevMedia, activatedMedia, saveMedia, haveChanges } =
+    useContextLabeler();
   const { medias, updateLoading, fetchLoading } = useContextLabelerData();
   const actualIndex = medias.findIndex((media) => media.id === activatedMedia?.id) + 1;
 
@@ -39,7 +40,11 @@ export const LabelerMediaControl = () => {
       >
         <ChevronRight aria-label="Icone flecha para direita" strokeWidth="1.5" />
       </StyledMediaControlButton>
-      <SaveButton onClick={saveMedia} disabled={updateLoading || fetchLoading} title="Salvar">
+      <SaveButton
+        onClick={saveMedia}
+        disabled={updateLoading || fetchLoading || !haveChanges}
+        title="Salvar"
+      >
         <Save />
       </SaveButton>
     </StyledMediaControlContainer>

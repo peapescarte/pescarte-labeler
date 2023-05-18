@@ -13,6 +13,7 @@ interface LabelerDataContextProps {
   categories: Category[];
   medias: Media[];
   authors: Author[];
+  allTags: Tag[];
   fetchLoading: boolean;
   updateLoading: boolean;
   updateMedia: (media: Media) => void;
@@ -23,6 +24,7 @@ const LabelerDataContext = createContext<LabelerDataContextProps | undefined>(un
 export function LabelerDataProvider({ children }: LabelerDataProviderProps): JSX.Element {
   const [categories, setCategories] = useState<Category[]>([]);
   const [authors, setAuthors] = useState<Author[]>([]);
+  const [allTags, setAllTags] = useState<Tag[]>([]);
   const [medias, setMedias] = useState<Media[]>([]);
   const [fetchLoading, setFetchLoading] = useState(true);
   const [updateLoading, setUpdateLoading] = useState(false);
@@ -66,12 +68,10 @@ export function LabelerDataProvider({ children }: LabelerDataProviderProps): JSX
       console.log('server response update media: ', updatedMedia);
 
       setMedias(
-        sortMediasByDate(
-          medias.map((item) => {
-            if (item.id === updatedMedia.id) return updatedMedia;
-            else return item;
-          }),
-        ),
+        medias.map((item) => {
+          if (item.id === updatedMedia.id) return updatedMedia;
+          else return item;
+        }),
       );
       toast('Salvo com sucesso !', {
         type: 'success',
@@ -99,6 +99,9 @@ export function LabelerDataProvider({ children }: LabelerDataProviderProps): JSX
     pescarteService.getAuthors().then((authorsFromApi) => {
       setAuthors(authorsFromApi);
     });
+    pescarteService.getTags().then((tagsFromApi) => {
+      setAllTags(tagsFromApi);
+    });
     pescarteService
       .getMedias()
       .then((mediasFromApi) => {
@@ -113,8 +116,8 @@ export function LabelerDataProvider({ children }: LabelerDataProviderProps): JSX
   }, []);
 
   const values = useMemo(
-    () => ({ categories, authors, medias, fetchLoading, updateLoading, updateMedia }),
-    [categories, authors, medias, fetchLoading, updateLoading, updateMedia],
+    () => ({ categories, authors, allTags, medias, fetchLoading, updateLoading, updateMedia }),
+    [categories, authors, allTags, medias, fetchLoading, updateLoading, updateMedia],
   );
 
   return <LabelerDataContext.Provider value={values}>{children}</LabelerDataContext.Provider>;

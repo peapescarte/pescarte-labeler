@@ -35,7 +35,7 @@ export const InputLabel = ({ onSubmit, disabled }: InputLabelProps) => {
         maxLength={15}
         value={label}
         onChangeCallback={(val) => handleInputLabel(val)}
-        placeholder="Insira uma tag..."
+        placeholder="Inserir nova etiqueta..."
         disabled={disabled}
       />
       <StyledSubmitButton type="submit" title="Adicionar nova etiqueta" disabled={disabled} />

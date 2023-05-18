@@ -20,7 +20,8 @@ interface LabelerProviderProps {
 
 interface LabelerContextProps {
   activatedMedia: Media | undefined;
-  addNewLabel: (tag: Omit<Tag, 'id'>) => boolean;
+  haveChanges: boolean;
+  addNewLabel: (tag: Omit<Tag, 'id'>) => Tag | undefined;
   updateNotes: (annotations: string) => void;
   updateAuthor: (author: Author) => void;
   goToNextMedia: () => void;
@@ -35,17 +36,22 @@ export function LabelerProvider({ children }: LabelerProviderProps): JSX.Element
   const { medias, updateMedia } = useContextLabelerData();
   const [activatedMedia, setActivatedMedia] = useState<Media>();
   const [activatedMediaIndex, setActivatedMediaIndex] = useState(0);
-  console.log(activatedMedia);
+
+  const haveChanges = useMemo(
+    () => !equal(activatedMedia, medias[activatedMediaIndex]),
+    [activatedMedia],
+  );
+
   const addNewLabel = useCallback(
     (tag: Omit<Tag, 'id'>) => {
-      if (!activatedMedia) return false;
+      if (!activatedMedia) return undefined;
 
       const repeated = activatedMedia.tags.find((item) => item.label === tag.label);
       if (repeated) {
         toast('Tag já inserida.', {
           type: 'warning',
         });
-        return false;
+        return undefined;
       }
 
       const newTag: Tag = { ...tag, id: uuidv4() };
@@ -55,7 +61,7 @@ export function LabelerProvider({ children }: LabelerProviderProps): JSX.Element
         return { ...current, tags: [...current.tags, newTag] };
       });
 
-      return true;
+      return newTag;
     },
     [activatedMedia, setActivatedMedia],
   );
@@ -110,7 +116,7 @@ export function LabelerProvider({ children }: LabelerProviderProps): JSX.Element
   const saveMedia = useCallback(async () => {
     if (!activatedMedia) return;
 
-    if (equal(activatedMedia, medias[activatedMediaIndex])) return;
+    if (!haveChanges) return;
 
     await updateMedia(activatedMedia);
   }, [activatedMedia, updateMedia, medias]);
@@ -118,7 +124,7 @@ export function LabelerProvider({ children }: LabelerProviderProps): JSX.Element
   const goToNextMedia = useCallback(async () => {
     if (!activatedMedia) return;
 
-    if (!equal(activatedMedia, medias[activatedMediaIndex])) {
+    if (haveChanges) {
       toast('Salve as modificações para continuar.', {
         type: 'warning',
       });
@@ -133,7 +139,7 @@ export function LabelerProvider({ children }: LabelerProviderProps): JSX.Element
   const goToPrevMedia = useCallback(async () => {
     if (!activatedMedia) return;
 
-    if (!equal(activatedMedia, medias[activatedMediaIndex])) {
+    if (haveChanges) {
       toast('Salve as modificações para continuar.', {
         type: 'warning',
       });
@@ -165,6 +171,7 @@ export function LabelerProvider({ children }: LabelerProviderProps): JSX.Element
       goToPrevMedia,
       saveMedia,
       updateAuthor,
+      haveChanges,
     }),
     [
       activatedMedia,
@@ -175,6 +182,7 @@ export function LabelerProvider({ children }: LabelerProviderProps): JSX.Element
       goToPrevMedia,
       saveMedia,
       updateAuthor,
+      haveChanges,
     ],
   );
 

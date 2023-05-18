@@ -2,7 +2,6 @@ import { ChevronDown } from 'lucide-react';
 import styled, { css } from 'styled-components';
 export const StyledDropDown = styled.div`
   ${({ theme }) => css`
-    max-width: 30rem;
     width: 100%;
     min-width: fit-content;
     position: relative;

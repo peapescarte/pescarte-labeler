@@ -48,7 +48,11 @@ export const LabelerMediaDescription = () => {
     <MediaDescriptionWrapper>
       <MediaDescriptionDataText>
         <MediaDescriptionDataTextHeader>Data:</MediaDescriptionDataTextHeader>
-        {activatedMedia?.filedate || <Skeleton width={50} />}
+        {activatedMedia ? (
+          new Date(activatedMedia.filedate).toLocaleDateString()
+        ) : (
+          <Skeleton width={50} />
+        )}
       </MediaDescriptionDataText>
       <MediaDescriptionAutor>
         <MediaDescriptionLabel>Autor: </MediaDescriptionLabel>

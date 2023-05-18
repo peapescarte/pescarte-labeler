@@ -36,6 +36,14 @@ export const StyledLabelerListItens = styled.div`
 
 export const InputLabelWrapper = styled.div`
   width: 100%;
+  padding-right: 2rem;
+  display: flex;
+  flex-direction: column;
+`;
+
+export const DropDownWrapper = styled.div`
+  width: 100%;
+  padding-right: 2rem;
   display: flex;
   flex-direction: column;
 `;

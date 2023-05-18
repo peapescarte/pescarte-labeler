@@ -4,12 +4,12 @@ import { StyledMediaSave, StyledSaveButton } from './styles';
 
 export const MediaSave = () => {
   const { fetchLoading, updateLoading } = useContextLabelerData();
-  const { saveMedia } = useContextLabeler();
+  const { saveMedia, haveChanges } = useContextLabeler();
 
   return (
     <StyledMediaSave>
       <StyledSaveButton
-        disabled={fetchLoading || updateLoading}
+        disabled={fetchLoading || updateLoading || !haveChanges}
         onClick={() => saveMedia()}
         title="Salvar"
       >
