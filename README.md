@@ -58,11 +58,11 @@ npm run lint:fix
 /pages - diretório de paginas.\
 /routes - configuração de rotas.\
 /service - services que auxiliam nas chamadas http.\
-index.tsx - arquivo raiz.\
+index.tsx - arquivo raiz.
 
 ## Proximos passos
-[] Listagem das midas com paginação, filtros e redirecionado para a etiquetagem.
-[] Formulário para cadastro de novas midias com upload de arquivo.
+[ ] Listagem das midas com paginação, filtros e redirecionado para a etiquetagem.\
+[ ] Formulário para cadastro de novas midias com upload de arquivo.
 
 ## Gostaria de contribuir com o projeto?
 
