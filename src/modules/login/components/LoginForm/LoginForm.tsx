@@ -1,14 +1,18 @@
 import { useState } from 'react';
 import { useContextAuth } from '../../../../providers/AuthProvider';
 import {
-  ContinueButton,
   LoginFormContainer,
   LoginFormInput,
   LoginFormInputWrapper,
   LoginFormLabel,
+  SignInButton,
   StyledLoginForm,
 } from './styles';
 
+/**
+ * Componente formulário do login
+ * Utiliza-se das entradas do usuario e de contexto para realizar a autenticação do usuario
+ */
 export const LoginForm = () => {
   const [cpf, setCpf] = useState('');
   const [password, setPassword] = useState('');
@@ -24,13 +28,17 @@ export const LoginForm = () => {
       <StyledLoginForm onSubmit={(e) => handleSubmit(e)}>
         <LoginFormInputWrapper>
           <LoginFormLabel>CPF:</LoginFormLabel>
-          <LoginFormInput onChangeCallback={(cpfVal) => setCpf(cpfVal)} required />
+          <LoginFormInput onChange={(cpfVal) => setCpf(cpfVal.target.value)} required />
         </LoginFormInputWrapper>
         <LoginFormInputWrapper>
           <LoginFormLabel>Senha:</LoginFormLabel>
-          <LoginFormInput onChangeCallback={(pass) => setPassword(pass)} type="password" required />
+          <LoginFormInput
+            onChange={(pass) => setPassword(pass.target.value)}
+            type="password"
+            required
+          />
         </LoginFormInputWrapper>
-        <ContinueButton type="submit">Entrar</ContinueButton>
+        <SignInButton type="submit">Entrar</SignInButton>
       </StyledLoginForm>
     </LoginFormContainer>
   );

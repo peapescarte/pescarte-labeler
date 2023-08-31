@@ -1,5 +1,11 @@
 import { useState } from 'react';
 
+/**
+ * Hook que auxilia na utilização da local storage
+ *
+ * @param string key - chave que será utilizado para identificar o item na local storage.
+ * @param string initialValue - valor inicial a ser salvo.
+ */
 export function useLocalStorage<ValueType>(
   key: string,
   initialValue: ValueType,

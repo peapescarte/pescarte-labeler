@@ -18,8 +18,3 @@ export type Media = MediaBase & {
   author: Author;
   tags: Tag[];
 };
-
-export type UpdateMedia = MediaBase & {
-  authorId: string;
-  tags: string[];
-};

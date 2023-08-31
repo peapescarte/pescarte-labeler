@@ -11,7 +11,7 @@ export const StyledToastContainer = styled(ToastContainer)`
   }
   .Toastify__progress-bar {
     ${({ theme }) => css`
-      background: ${theme.colors.primary};
+      background: ${theme.colors.primary80};
     `}
   }
   .Toastify__progress-bar--success {

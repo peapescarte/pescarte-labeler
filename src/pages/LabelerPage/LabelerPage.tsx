@@ -1,4 +1,5 @@
 import Skeleton from 'react-loading-skeleton';
+import { Footer } from '../../components/Footer/Footer';
 import { Header } from '../../components/Header';
 import { LabelerList } from '../../modules/labeler/components/LabelerList';
 import { LabelerMediaControl } from '../../modules/labeler/components/LabelerMediaControl';
@@ -14,29 +15,31 @@ import {
   AsideList,
   AsideSave,
   ControllersWrapper,
-  FooterPartners,
   LabelerPageHeader,
-  PartnersDisclaimer,
-  PartnersImage,
   SectionDescription,
   StyledContainer,
   StyledFooter,
   StyledMain,
 } from './styles';
 
+/**
+ * Componente pagina labeler
+ * Pagina que agrega os componentes de adição, atualização e removação de etiquetas
+ * Também exibe a midia e suas informações a serem editadas
+ */
 export const LabelerPage = () => {
-  const { activatedMedia } = useContextLabeler();
+  const { activatedMedia, haveChanges } = useContextLabeler();
 
   return (
     <StyledContainer>
       <LabelerPageHeader>
-        <Header />
+        <Header haveChanges={haveChanges} />
       </LabelerPageHeader>
       <StyledMain>
         <LabelerMediaViwer />
         <ControllersWrapper>
-          <MediaDescriptionDataText>
-            <MediaDescriptionDataTextHeader>Nome da mídia:</MediaDescriptionDataTextHeader>
+          <MediaDescriptionDataTextHeader>Nome da mídia:</MediaDescriptionDataTextHeader>
+          <MediaDescriptionDataText title={activatedMedia?.filename}>
             {activatedMedia?.filename || <Skeleton width={200} />}
           </MediaDescriptionDataText>
           <LabelerMediaControl />
@@ -52,16 +55,7 @@ export const LabelerPage = () => {
         <MediaSave />
       </AsideSave>
       <StyledFooter>
-        <FooterPartners>
-          <PartnersImage src="/images/ibama.png" />
-          <PartnersImage src="/images/uenf.png" />
-          <PartnersImage src="/images/petrobras.png" />
-          <PartnersImage src="/images/ipead.png" />
-        </FooterPartners>
-        <PartnersDisclaimer>
-          A realização do Projeto Pescarte é uma medida de mitigação exigida
-          <br /> pelo licenciamento ambiental federal, conduzido pelo IBAMA.
-        </PartnersDisclaimer>
+        <Footer />
       </StyledFooter>
     </StyledContainer>
   );

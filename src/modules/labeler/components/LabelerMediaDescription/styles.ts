@@ -4,7 +4,6 @@ export const MediaDescriptionWrapper = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  margin-bottom: 1.6rem;
   gap: 1.6rem;
 `;
 
@@ -14,17 +13,24 @@ export const MediaDescriptionGroup = styled.div`
 `;
 
 export const MediaDescriptionAutor = styled.div`
-  display: flex;
-  width: 40%;
-  align-items: center;
-  gap: 0.8rem;
+  ${({ theme }) => css`
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    width: 100%;
+
+    @media screen and ${theme.devices.desktop} {
+      width: 40%;
+    }
+  `}
 `;
 
 export const MediaDescriptionDataText = styled.span`
   ${({ theme }) => css`
     font-size: ${theme.fontSizes.regular};
-    display: flex;
-    align-items: center;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
   `}
 `;
 

@@ -1,13 +1,18 @@
+/**
+ * Estrutura de chamada Graphql de login
+ *
+ * @param string cpf - cpf em formato de texto.
+ * @param string senha - senha em formato de texto.
+ */
 const LOGIN = /* GraphQL */ `
   mutation Login($cpf: String!, $senha: String!) {
-    login(cpf: $cpf, password: $senha) {
+    login(input: { cpf: $cpf, senha: $senha }) {
       token
-      user {
+      usuario {
         id
-        role
-        firstName
-        lastName
-        middleName
+        tipo
+        primeiroNome
+        sobrenome
       }
     }
   }

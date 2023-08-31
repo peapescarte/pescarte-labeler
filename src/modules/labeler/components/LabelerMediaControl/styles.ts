@@ -1,10 +1,12 @@
 import styled, { css } from 'styled-components';
+import { Button } from '../../../../components/Button';
 
 export const StyledMediaControlContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   align-self: flex-start;
+  margin-left: auto;
 `;
 
 export const StyledMediaControlButton = styled.button`
@@ -24,10 +26,7 @@ export const StyledMediaControlCounter = styled.span`
   `}
 `;
 
-export const SaveButton = styled.button`
-  border-radius: 0;
-  border: none;
-  background-color: transparent;
-  cursor: pointer;
+export const SaveButton = styled(Button)`
   margin: 0 0.8rem;
+  padding: 1.2rem;
 `;

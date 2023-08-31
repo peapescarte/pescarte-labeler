@@ -1,5 +1,4 @@
 import styled, { css } from 'styled-components';
-import { Input } from '../../../../../../components/Input';
 
 export const StyledLabel = styled.span`
   ${({ theme }) => css`
@@ -16,12 +15,14 @@ type StyledInputProps = {
   value: string;
 };
 
-export const StyledInput = styled(Input)<StyledInputProps>`
+export const StyledInput = styled.input<StyledInputProps>`
   font-size: ${(props) => props.theme.fontSizes.medium};
   min-width: 5rem;
   height: fit-content;
   width: ${(props) => `calc(${props.value.length}ch + 2rem)`};
   border: 1px solid black;
+  border-radius: 4px;
   background-color: ${(props) => props.theme.colors.background};
   margin: 0;
+  padding-left: 0.5rem;
 `;

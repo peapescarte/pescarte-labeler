@@ -3,8 +3,8 @@ import Skeleton from 'react-loading-skeleton';
 import { Author } from '../../interfaces/author';
 import { useContextLabelerData } from '../../providers/LabelerDataProvider';
 import { useContextLabeler } from '../../providers/LabelerProvider';
-import { SearchField } from '../SearchField';
-import { option } from '../SearchField/SearchField';
+import { DropDownSearch } from '../DropDownSearch';
+import { option } from '../DropDownSearch/DropDownSearch';
 import {
   MediaDescriptionAutor,
   MediaDescriptionDataText,
@@ -16,14 +16,19 @@ import {
   MediaDescriptionWrapper,
 } from './styles';
 
+/**
+ * Componente que exibe toda descrição da midia
+ * configura e exibe a data
+ * configura e exibe o autor
+ * configura e exibe as anotações
+ */
 export const LabelerMediaDescription = () => {
   const { activatedMedia, updateNotes, updateAuthor } = useContextLabeler();
   const { fetchLoading, authors, updateLoading } = useContextLabelerData();
 
   const isLoading = useMemo(() => fetchLoading || !activatedMedia, [fetchLoading, activatedMedia]);
 
-  const joinAuthorNames = (author: Author) =>
-    [author.firstName, author.middleName, author.lastName].join(' ');
+  const joinAuthorNames = (author: Author) => [author.firstName, author.lastName].join(' ');
 
   const autor = useMemo(() => {
     if (!activatedMedia) return '';
@@ -32,7 +37,15 @@ export const LabelerMediaDescription = () => {
   }, [activatedMedia]);
 
   const options: option[] = useMemo(
-    () => authors.map((author) => ({ id: author.id, value: joinAuthorNames(author) })),
+    () =>
+      authors
+        .map((author) => ({ id: author.id, value: joinAuthorNames(author) }))
+        .sort((a, b) => {
+          if (a.value > b.value) return 1;
+          if (a.value < b.value) return -1;
+
+          return 1;
+        }),
     [authors],
   );
 
@@ -59,7 +72,7 @@ export const LabelerMediaDescription = () => {
         {isLoading ? (
           <Skeleton width={200} height={40} />
         ) : (
-          <SearchField
+          <DropDownSearch
             defaultValue={autor}
             options={options}
             onSelectCallback={handleAuthorChange}

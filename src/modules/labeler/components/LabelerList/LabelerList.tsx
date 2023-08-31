@@ -3,8 +3,8 @@ import Skeleton from 'react-loading-skeleton';
 import { Category, Tag } from '../../interfaces';
 import { useContextLabelerData } from '../../providers/LabelerDataProvider';
 import { useContextLabeler } from '../../providers/LabelerProvider';
-import { SearchField } from '../SearchField';
-import { option } from '../SearchField/SearchField';
+import { DropDownSearch } from '../DropDownSearch';
+import { option } from '../DropDownSearch/DropDownSearch';
 import { LabelerListItem } from './components/LabelerListItem';
 import {
   DropDownWrapper,
@@ -16,6 +16,11 @@ import {
   StyledLabelerListItens,
 } from './styles';
 
+/**
+ * Exibe a Lista de etiquetas, responsavel por listar
+ * Exibe a Seleção da categoria da listagem, dropdown com as categorias das etiquetas
+ * Exibe o Campo de inserção de nova etiqueta
+ */
 export const LabelerList = () => {
   const { activatedMedia, removeLabel, addNewLabel } = useContextLabeler();
   const { categories, allTags, updateLoading, fetchLoading } = useContextLabelerData();
@@ -23,7 +28,14 @@ export const LabelerList = () => {
   const [optionsTag, setOptionsTag] = useState<option[]>([]);
 
   const tags = useMemo(
-    () => activatedMedia?.tags.filter((tag) => tag.categoria.id === selectedCategory?.id),
+    () =>
+      activatedMedia?.tags
+        .filter((tag) => tag.categoryId === selectedCategory?.id)
+        .sort((tagA: Tag, tagB: Tag) => {
+          if (tagA.label < tagB.label) return -1;
+
+          return 1;
+        }),
     [activatedMedia, selectedCategory],
   );
 
@@ -34,20 +46,20 @@ export const LabelerList = () => {
   };
 
   const handleRemoveTag = (tag: Tag) => {
-    removeLabel(tag.id);
+    removeLabel(tag);
   };
 
   const handleNewTag = (tag: string) => {
     if (!activatedMedia || !selectedCategory || updateLoading) return false;
 
     const created = addNewLabel({
-      categoria: {
-        id: selectedCategory.id,
-      },
+      categoryId: selectedCategory.id,
       label: tag,
     });
 
-    if (created) setOptionsTag([...optionsTag, { id: created.id, value: created.label }]);
+    if (created && !optionsTag.some((opt) => opt.value === created.label)) {
+      setOptionsTag([...optionsTag, { id: created.id, value: created.label }]);
+    }
 
     return created;
   };
@@ -77,7 +89,16 @@ export const LabelerList = () => {
   useEffect(() => {
     if (!optionsTag) return;
 
-    setOptionsTag(allTags.map((tag) => ({ id: tag.id, value: tag.label })));
+    setOptionsTag(
+      allTags
+        .map((tag) => ({ id: tag.id, value: tag.label }))
+        .sort((a, b) => {
+          if (a.value > b.value) return 1;
+          if (a.value < b.value) return -1;
+
+          return 1;
+        }),
+    );
   }, [allTags]);
 
   return (
@@ -107,7 +128,7 @@ export const LabelerList = () => {
           </StyledLabelerListItens>
           <InputLabelWrapper>
             <Label>Adicionar etiqueta:</Label>
-            <SearchField
+            <DropDownSearch
               maxLength={15}
               placeholder="Inserir nova etiqueta..."
               onSelectCallback={(val) => handleNewTag(val.value)}

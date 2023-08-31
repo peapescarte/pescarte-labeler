@@ -1,8 +1,12 @@
+/**
+ * Estrutura de chamada Graphql para busca de categorias
+ *
+ */
 const GET_CATEGORIES = /* GraphQL */ `
   query GetCategories {
-    listCategorias {
+    listarCategorias {
       id
-      name
+      nome
     }
   }
 `;

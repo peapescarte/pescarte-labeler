@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import { Input } from '../../../../components/Input';
+import { Button } from '../../../../components/Button';
 
 export const LoginFormContainer = styled.div`
   border: 2px solid ${(props) => props.theme.colors.border};
@@ -22,8 +22,14 @@ export const LoginFormLabel = styled.label`
   `}
 `;
 
-export const LoginFormInput = styled(Input)`
-  max-width: 30rem;
+export const LoginFormInput = styled.input`
+  ${({ theme }) => css`
+    max-width: 30rem;
+    height: 4rem;
+    border: 1px solid ${theme.colors.border};
+    border-radius: 4px;
+    padding-left: 0.5rem;
+  `}
 `;
 
 export const LoginFormInputWrapper = styled.div`
@@ -31,19 +37,8 @@ export const LoginFormInputWrapper = styled.div`
   flex-direction: column;
 `;
 
-export const ContinueButton = styled.button`
+export const SignInButton = styled(Button)`
   ${({ theme }) => css`
-    background-color: ${theme.colors.primary};
-    color: ${theme.colors.white};
-    border: none;
-    border-radius: 0.4rem;
     width: 100%;
-    height: fit-content;
-    padding: 1.2rem 2rem;
-    font-size: ${theme.fontSizes.regular};
-    cursor: pointer;
-    :hover {
-      background-color: ${theme.colors.primary60};
-    }
   `}
 `;

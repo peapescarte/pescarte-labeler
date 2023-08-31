@@ -1,20 +1,27 @@
 import styled, { css } from 'styled-components';
 
 export const StyledImageViwer = styled.div`
-  width: 100%;
-  height: 100%;
+  ${({ theme }) => css`
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+  `}
 `;
 
+export type imageObjectFit = 'fill' | 'contain' | 'cover' | 'none' | 'scale-down';
 type StyledImageProps = {
-  isLoading: boolean;
+  showImage: boolean;
   isBlurred: boolean;
+  objectFit: imageObjectFit;
 };
 
 export const StyledImage = styled.img<StyledImageProps>`
-  ${({ isLoading, isBlurred }) => css`
+  ${({ showImage, isBlurred, objectFit = 'fill' }) => css`
     width: 100%;
-    height: 100%;
-    display: ${isLoading ? 'none' : 'block'};
+    height: auto;
+    object-fit: ${objectFit};
+    display: ${showImage ? 'block' : 'none'};
     filter: ${isBlurred ? 'blur(5px)' : 'blur(0px)'};
   `}
 `;
@@ -27,6 +34,8 @@ export const ImageLoadingWrapper = styled.div`
 
 export const ImageLoadingText = styled.p`
   ${({ theme }) => css`
+    width: 100%;
+    text-align: center;
     font-size: ${theme.fontSizes.regularMedium};
     position: absolute;
     top: 50%;

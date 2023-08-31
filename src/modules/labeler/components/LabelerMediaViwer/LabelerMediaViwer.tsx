@@ -3,6 +3,10 @@ import { ImageViwer } from '../../../media-viwer/components/ImageViwer';
 import { useContextLabeler } from '../../providers/LabelerProvider';
 import { MediaLoadingText, MediaLoadingWrapper, MediaViwerWrapper } from './styles';
 
+/**
+ * Componente que é responsavel por controlar exibição de midias
+ * A ideia é poder ser um switch entre diferentes tipos de midias e não apenas imagem.
+ */
 export const LabelerMediaViwer = () => {
   const { activatedMedia } = useContextLabeler();
   return (
@@ -12,6 +16,7 @@ export const LabelerMediaViwer = () => {
           isSensive={activatedMedia.sensible}
           src={activatedMedia.link}
           alt={activatedMedia.altText}
+          loadingText="Carregando imagem.."
         />
       ) : (
         <MediaLoadingWrapper>

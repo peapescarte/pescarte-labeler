@@ -9,6 +9,12 @@ type LabelerListItem = {
   onEditCallback: (newLabel: string) => void;
 };
 
+/**
+ * Componente do item da lista, estiliza e da opções de alterações como editar e remover
+ * @param string children - texto do item da lista
+ * @param function onEditCallback - função de retorno quando clicado na opção de editar
+ * @param function onRemoveCallback - função de retorno quando clicado na opção de remover
+ */
 export const LabelerListItem = ({
   children,
   onRemoveCallback,

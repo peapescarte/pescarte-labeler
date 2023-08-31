@@ -7,6 +7,14 @@ export type LabelEditableProps = {
   onChangeCallback: (newLabel: string) => void;
 };
 
+/**
+ * Componente de edição de uma label, quando selecionado opção de editar esse componente é exibido.
+ * um input com o valor original e que da possibilidade de edita-lo
+ *
+ * @param boolean editMode - chave que ativo e desativa o componente
+ * @param string label - texto a ser editado
+ * @param function onChangeCallback - função de retorno quando a edição é concluida
+ */
 export const LabelEditable = ({ editMode, label, onChangeCallback }: LabelEditableProps) => {
   const [labelValue, setLabelValue] = useState(label);
 
@@ -24,7 +32,7 @@ export const LabelEditable = ({ editMode, label, onChangeCallback }: LabelEditab
     <StyledInput
       autoFocus={true}
       value={labelValue}
-      onChangeCallback={(val: string) => setLabelValue(val)}
+      onChange={(event: React.ChangeEvent<HTMLInputElement>) => setLabelValue(event.target.value)}
       onBlur={() => handleLabelChange(labelValue)}
       onKeyDown={(event: KeyboardEvent<HTMLInputElement>) => handleKeyPress(event)}
     />

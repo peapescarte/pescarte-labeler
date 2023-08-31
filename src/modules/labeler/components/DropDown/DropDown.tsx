@@ -21,6 +21,12 @@ export type DropDownProps = {
   defaultValue?: string;
 };
 
+/**
+ * Dropdown utilizada para seleção de categoria.
+ * @param OptionType options - lista de opções
+ * @param Function OnSelectCallback  - função chamada quando um item é selecionado, retornando qual foi selecionado
+ * @param string defaultValue - valor padrão que já vem selecionado no dropdown
+ */
 export const DropDown = ({ options, className, onSelectCallback, defaultValue }: DropDownProps) => {
   const [selected, setSelected] = useState(defaultValue);
   const [showOptions, setShowOptions] = useState(false);

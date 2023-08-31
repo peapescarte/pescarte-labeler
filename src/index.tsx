@@ -5,11 +5,16 @@ import 'react-loading-skeleton/dist/skeleton.css';
 import App from './App';
 import './index.css';
 import { startMSW } from './mocks/browser';
-import reportWebVitals from './reportWebVitals';
 import Theme, { theme } from './Theme';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 startMSW();
+
+/**
+ * Root do projeto, aqui é o ponto de entrada de toda a aplicação
+ * está distribuindo os temas configurados à todo o projeto
+ *
+ */
 root.render(
   <React.StrictMode>
     <Theme>
@@ -19,8 +24,3 @@ root.render(
     </Theme>
   </React.StrictMode>,
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();

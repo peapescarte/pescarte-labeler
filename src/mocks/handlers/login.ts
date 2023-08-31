@@ -3,7 +3,7 @@ import { graphql } from 'msw';
 export const LoginHandlers = [
   graphql.mutation('Login', (req, res, ctx) => {
     const { cpf, password } = req.variables;
-    console.log(cpf, password);
+
     return res(
       ctx.data({
         login: {

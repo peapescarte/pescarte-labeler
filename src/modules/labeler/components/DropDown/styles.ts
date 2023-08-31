@@ -66,7 +66,6 @@ export const OptionsWrapper = styled.ul<OptionsWrapperProps>`
     z-index: ${theme.zIndex.dropdown};
     display: ${show ? 'block' : 'none'};
 
-    max-width: 30rem;
     width: 100%;
     min-width: fit-content;
     border: 1.5px solid ${theme.colors.border};
@@ -75,6 +74,10 @@ export const OptionsWrapper = styled.ul<OptionsWrapperProps>`
 
     padding: 1.2rem 1.2rem 0 1.2rem;
     background-color: ${theme.colors.white};
+
+    @media screen and ${theme.devices.desktop} {
+      max-width: 30rem;
+    }
   `}
 `;
 

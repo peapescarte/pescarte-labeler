@@ -1,12 +1,14 @@
 import { createBrowserRouter, createRoutesFromElements, Outlet, Route } from 'react-router-dom';
-import { LabelerDataProvider } from '../modules/labeler/providers/LabelerDataProvider';
-import { LabelerProvider } from '../modules/labeler/providers/LabelerProvider';
-import { LabelerPage } from '../pages/LabelerPage';
+import { LabelerPageRoot } from '../pages/LabelerPage';
 import { ListMedias } from '../pages/ListMedias';
 import { Login } from '../pages/Login';
 import { LabelerRoot, Root } from '../pages/Root';
 import { AuthProvider } from '../providers/AuthProvider';
+import { NotFound } from '../pages/NotFound';
 
+/**
+ * Configuração e crição das rotas da aplicação
+ */
 export default createBrowserRouter(
   createRoutesFromElements(
     <Route
@@ -19,23 +21,10 @@ export default createBrowserRouter(
       <Route path="/" element={<Root />}>
         <Route path="/login" element={<Login />} />
         <Route path="/labeler" element={<LabelerRoot />}>
-          <Route
-            path="edit"
-            element={
-              <LabelerProvider>
-                <LabelerPage />
-              </LabelerProvider>
-            }
-          />
-          <Route
-            path="list"
-            element={
-              <LabelerDataProvider>
-                <ListMedias />
-              </LabelerDataProvider>
-            }
-          />
+          <Route path="edit/:id" element={<LabelerPageRoot />} />
+          <Route path="list" element={<ListMedias />} />
         </Route>
+        <Route path="*" element={<NotFound />} />
       </Route>
       ,
     </Route>,

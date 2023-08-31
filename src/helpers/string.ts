@@ -1,3 +1,8 @@
+/**
+ * Função que normaliza uma string, converte para minusculo e remove acentos.
+ *
+ * @param string text - texto a ser normalizado.
+ */
 export const normalizeString = (string: string): string =>
   string
     .toLowerCase()

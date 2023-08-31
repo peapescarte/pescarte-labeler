@@ -1,11 +1,14 @@
+/**
+ * Estrutura de chamada Graphql para busca de autores
+ *
+ */
 const GET_AUTHORS = /* GraphQL */ `
   query GetAuthors {
-    listUsers {
-      firstName
-      middleName
-      lastName
+    listarUsuarios {
       id
-      role
+      primeiroNome
+      sobrenome
+      tipo
     }
   }
 `;

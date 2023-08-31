@@ -1,9 +1,11 @@
 import { createContext, ReactNode, useContext, useEffect, useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
 import { dateToEN } from '../../../helpers';
+import { MediaPayload } from '../graphql/queries/Media';
+import { RemoveTagsPayload, TagPayload } from '../graphql/queries/Tag';
 import { Category, Media, Tag } from '../interfaces';
 import { Author } from '../interfaces/author';
-import { UpdateMedia } from '../interfaces/media';
+import { convertMediaObjToPayload } from '../service/helpers';
 import { PescarteLabelerService } from '../service/pescarte-labeler-service';
 interface LabelerDataProviderProps {
   children: ReactNode;
@@ -16,11 +18,17 @@ interface LabelerDataContextProps {
   allTags: Tag[];
   fetchLoading: boolean;
   updateLoading: boolean;
-  updateMedia: (media: Media) => void;
+  updateMedia: (media: Media, newTags: Tag[], tagsToRemove: Tag[]) => void;
+  getMediaById: (id: string) => Promise<Media>;
 }
 
 const LabelerDataContext = createContext<LabelerDataContextProps | undefined>(undefined);
 
+/**
+ * Provedor de Contexto dos dados do labeler
+ * Realiza o uso de service para buscar e disponibilizar os dados através de contexto para aplicação
+ *
+ */
 export function LabelerDataProvider({ children }: LabelerDataProviderProps): JSX.Element {
   const [categories, setCategories] = useState<Category[]>([]);
   const [authors, setAuthors] = useState<Author[]>([]);
@@ -28,7 +36,7 @@ export function LabelerDataProvider({ children }: LabelerDataProviderProps): JSX
   const [medias, setMedias] = useState<Media[]>([]);
   const [fetchLoading, setFetchLoading] = useState(true);
   const [updateLoading, setUpdateLoading] = useState(false);
-
+  //to-do: remover o medias
   const pescarteService = new PescarteLabelerService();
 
   const sortMediasByDate = (mediasToSort: Media[]) => {
@@ -38,30 +46,24 @@ export function LabelerDataProvider({ children }: LabelerDataProviderProps): JSX
     });
   };
 
-  const createUpdateMediaPayload = async (media: Media): Promise<UpdateMedia> => {
-    const tags = await createTags(media.tags);
-
-    const toUpdateMedia: UpdateMedia = {
-      altText: media.altText || '',
-      filedate: media.filedate,
-      filename: media.filename,
-      id: media.id,
-      link: media.link,
-      observation: media.observation || '',
-      sensible: media.sensible,
-      type: media.type,
-      tags: tags.map((tag) => tag.id),
-      authorId: media.author.id,
-    };
-
-    return toUpdateMedia;
-  };
-
-  const updateMedia = async (media: Media) => {
+  const updateMedia = async (media: Media, newTags: Tag[], tagsToRemove: Tag[]) => {
     setUpdateLoading(true);
+    const toastId = toast.loading('Salvando os dados...');
 
     try {
-      const toUpdateMedia = await createUpdateMediaPayload(media);
+      // atualizar primeiro as tags para retorno do updateMedia ter as novas etiquetas
+      const removedTags = await removeTags(tagsToRemove, media.id);
+      console.log(removedTags);
+      const tags = await createTags(newTags);
+
+      // evitar adicionar tag repetida (erro servidor)
+
+      await pescarteService.addMediaTags({
+        midiaId: media.id,
+        tagsId: tags.map((tag) => tag.id),
+      });
+
+      const toUpdateMedia = convertMediaObjToPayload(media);
 
       const updatedMedia = await pescarteService.updateMedia(toUpdateMedia);
 
@@ -69,18 +71,22 @@ export function LabelerDataProvider({ children }: LabelerDataProviderProps): JSX
 
       setMedias(
         medias.map((item) => {
-          if (item.id === updatedMedia.id) return updatedMedia;
+          if (item.id === updatedMedia.id) return { ...updatedMedia, tags: media.tags };
           else return item;
         }),
       );
-      toast('Salvo com sucesso !', {
+      toast.update(toastId, {
+        render: 'Salvo com sucesso!',
         type: 'success',
+        isLoading: false,
+        autoClose: 5000,
       });
     } catch {
-      toast('Erro no servidor, tente novamente !', {
+      toast.update(toastId, {
+        render: 'Não foi possivel salvar, tente novamente!',
         type: 'error',
-        hideProgressBar: true,
-        autoClose: false,
+        isLoading: false,
+        autoClose: 5000,
       });
     } finally {
       setUpdateLoading(false);
@@ -88,23 +94,44 @@ export function LabelerDataProvider({ children }: LabelerDataProviderProps): JSX
   };
 
   const createTags = async (tags: Tag[]) => {
-    const payload = tags.map((tag) => ({ label: tag.label, categoriaId: tag.categoria.id }));
+    const payload: TagPayload[] = tags.map((tag) => ({
+      etiqueta: tag.label,
+      categoriaId: tag.categoryId,
+    }));
     return pescarteService.createTags(payload);
   };
 
+  const removeTags = async (tags: Tag[], mediaId: string) => {
+    if (tags.length === 0) return [];
+
+    const tagsId = tags.map((tag) => tag.id);
+
+    const payload: RemoveTagsPayload = {
+      midiaId: mediaId,
+      tagsId,
+    };
+
+    return pescarteService.removeTags(payload);
+  };
+
+  const getMediaById = async (id: string): Promise<Media> => {
+    setFetchLoading(true);
+    const result = await pescarteService.getMedia(id);
+    setFetchLoading(false);
+    return result;
+  };
+
   const fetchData = async () => {
-    pescarteService.getCategories().then((categoriesFromApi) => {
-      setCategories(categoriesFromApi);
-    });
-    pescarteService.getAuthors().then((authorsFromApi) => {
-      setAuthors(authorsFromApi);
-    });
-    pescarteService.getTags().then((tagsFromApi) => {
-      setAllTags(tagsFromApi);
-    });
-    pescarteService
-      .getMedias()
-      .then((mediasFromApi) => {
+    Promise.all([
+      pescarteService.getCategories(),
+      pescarteService.getAuthors(),
+      pescarteService.getTags(),
+      pescarteService.getMedias(),
+    ])
+      .then(([categoriesFromApi, authorsFromApi, tagsFromApi, mediasFromApi]) => {
+        setCategories(categoriesFromApi);
+        setAuthors(authorsFromApi);
+        setAllTags(tagsFromApi);
         setMedias(sortMediasByDate(mediasFromApi));
       })
       .finally(() => setFetchLoading(false));
@@ -116,8 +143,17 @@ export function LabelerDataProvider({ children }: LabelerDataProviderProps): JSX
   }, []);
 
   const values = useMemo(
-    () => ({ categories, authors, allTags, medias, fetchLoading, updateLoading, updateMedia }),
-    [categories, authors, allTags, medias, fetchLoading, updateLoading, updateMedia],
+    () => ({
+      categories,
+      authors,
+      allTags,
+      medias,
+      fetchLoading,
+      updateLoading,
+      getMediaById,
+      updateMedia,
+    }),
+    [categories, authors, allTags, medias, fetchLoading, updateLoading, getMediaById, updateMedia],
   );
 
   return <LabelerDataContext.Provider value={values}>{children}</LabelerDataContext.Provider>;
