@@ -1,5 +1,4 @@
 import equal from 'deep-equal';
-import { GraphQLError } from 'graphql-request/dist/types';
 import {
   createContext,
   ReactNode,
@@ -22,6 +21,7 @@ interface LabelerProviderProps {
 
 interface LabelerContextProps {
   activatedMedia: Media | undefined;
+  activatedMediaIndex: number | undefined;
   haveChanges: boolean;
   addNewLabel: (tag: Omit<Tag, 'id'>) => Tag | undefined;
   updateNotes: (annotations: string) => void;
@@ -43,16 +43,45 @@ const LabelerContext = createContext<LabelerContextProps | undefined>(undefined)
 export function LabelerProvider({ children, initialMediaId }: LabelerProviderProps): JSX.Element {
   const { medias, updateMedia, getMediaById } = useContextLabelerData();
   const [activatedMedia, setActivatedMedia] = useState<Media>();
-  const [activatedMediaIndex, setActivatedMediaIndex] = useState(0);
   const [newTags, setNewTags] = useState<Tag[]>([]);
   const [removedTags, setRemovedTags] = useState<Tag[]>([]);
 
+  const activatedMediaIndex = useMemo(() => {
+    const actualIndex = medias.findIndex((media) => media.id === activatedMedia?.id);
+    if (actualIndex !== -1) {
+      return actualIndex;
+    }
+  }, [medias, activatedMedia]);
+
   const navigate = useNavigate();
 
-  const haveChanges = useMemo(
-    () => !equal(activatedMedia, medias[activatedMediaIndex]),
-    [activatedMedia],
-  );
+  const checkMediasEqual = (actual: Media, expected: Media) => {
+    if (actual.author.id !== expected.author.id) {
+      return false;
+    }
+
+    if (actual.observation !== expected.observation) {
+      return false;
+    }
+
+    if (
+      actual.tags.length !== expected.tags.length ||
+      !actual.tags.every((tag) =>
+        Boolean(expected.tags.find((expectedTag) => tag.id === expectedTag.id)),
+      )
+    ) {
+      return false;
+    }
+
+    return true;
+  };
+
+  const haveChanges = useMemo(() => {
+    if (activatedMedia && activatedMediaIndex !== undefined) {
+      return !checkMediasEqual(activatedMedia, medias[activatedMediaIndex]);
+    }
+    return false;
+  }, [activatedMedia, medias, activatedMediaIndex]);
 
   const addNewLabel = useCallback(
     (tag: Omit<Tag, 'id'>) => {
@@ -163,26 +192,25 @@ export function LabelerProvider({ children, initialMediaId }: LabelerProviderPro
     if (!activatedMedia) return;
 
     if (!haveChanges) return;
-    console.log(newTags);
-    console.log(removedTags);
+
     await updateMedia(activatedMedia, newTags, removedTags);
   }, [activatedMedia, updateMedia, medias, newTags, removedTags]);
 
   const goToNextMedia = useCallback(async () => {
-    if (!activatedMedia) return;
+    if (activatedMediaIndex === undefined || medias.length < 0) return;
 
     const NextIndex = activatedMediaIndex + 1 >= medias.length ? 0 : activatedMediaIndex + 1;
 
-    setActivatedMediaIndex(NextIndex);
-  }, [activatedMedia, medias]);
+    navigate(`/labeler/edit/${medias[NextIndex].id}`);
+  }, [activatedMediaIndex, medias]);
 
   const goToPrevMedia = useCallback(async () => {
-    if (!activatedMedia) return;
+    if (activatedMediaIndex === undefined || medias.length < 0) return;
 
     const NextIndex = activatedMediaIndex - 1 < 0 ? medias.length - 1 : activatedMediaIndex - 1;
 
-    setActivatedMediaIndex(NextIndex);
-  }, [activatedMedia, medias]);
+    navigate(`/labeler/edit/${medias[NextIndex].id}`);
+  }, [activatedMediaIndex, medias]);
 
   useEffect(() => {
     const initialize = async () => {
@@ -204,11 +232,12 @@ export function LabelerProvider({ children, initialMediaId }: LabelerProviderPro
     };
 
     initialize();
-  }, [activatedMediaIndex, initialMediaId]);
+  }, [initialMediaId]);
 
   const values = useMemo(
     () => ({
       activatedMedia,
+      activatedMediaIndex,
       addNewLabel,
       updateNotes,
       removeLabel,
@@ -220,6 +249,7 @@ export function LabelerProvider({ children, initialMediaId }: LabelerProviderPro
     }),
     [
       activatedMedia,
+      activatedMediaIndex,
       addNewLabel,
       updateNotes,
       removeLabel,

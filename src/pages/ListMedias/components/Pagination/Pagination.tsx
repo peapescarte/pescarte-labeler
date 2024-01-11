@@ -10,7 +10,7 @@ type PaginationProps = {
 
 export const Pagination = ({ total, pageSize, page, setPage }: PaginationProps) => {
   const visibleButtons = 4;
-  const numberPages = Math.ceil(total / pageSize);
+  const numberPages = total === 0 ? 1 : Math.ceil(total / pageSize);
 
   const buttons = useMemo(() => {
     let numberButtons = numberPages > visibleButtons ? visibleButtons : numberPages - 1;

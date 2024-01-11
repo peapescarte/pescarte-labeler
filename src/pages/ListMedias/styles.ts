@@ -45,6 +45,21 @@ export const StyledListMedia = styled.div`
   `}
 `;
 
+export const StyledListEmpty = styled.div`
+  width: 100%;
+  max-width: 100%;
+  display: flex;
+  justify-content: center;
+  margin: 1rem 0rem;
+`;
+
+export const StyledListEmptyText = styled.p`
+  ${({ theme }) => css`
+    font-size: ${theme.fontSizes.mediumLarge};
+    font-weight: 500;
+  `}
+`;
+
 export const StyledListMediaFilters = styled.div`
   ${({ theme }) => css`
     padding: 0.8rem 0rem;

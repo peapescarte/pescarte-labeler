@@ -1,7 +1,6 @@
 import { createContext, ReactNode, useContext, useEffect, useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
 import { dateToEN } from '../../../helpers';
-import { MediaPayload } from '../graphql/queries/Media';
 import { RemoveTagsPayload, TagPayload } from '../graphql/queries/Tag';
 import { Category, Media, Tag } from '../interfaces';
 import { Author } from '../interfaces/author';
@@ -36,7 +35,6 @@ export function LabelerDataProvider({ children }: LabelerDataProviderProps): JSX
   const [medias, setMedias] = useState<Media[]>([]);
   const [fetchLoading, setFetchLoading] = useState(true);
   const [updateLoading, setUpdateLoading] = useState(false);
-  //to-do: remover o medias
   const pescarteService = new PescarteLabelerService();
 
   const sortMediasByDate = (mediasToSort: Media[]) => {
@@ -52,8 +50,8 @@ export function LabelerDataProvider({ children }: LabelerDataProviderProps): JSX
 
     try {
       // atualizar primeiro as tags para retorno do updateMedia ter as novas etiquetas
-      const removedTags = await removeTags(tagsToRemove, media.id);
-      console.log(removedTags);
+      await removeTags(tagsToRemove, media.id);
+
       const tags = await createTags(newTags);
 
       // evitar adicionar tag repetida (erro servidor)
@@ -66,8 +64,6 @@ export function LabelerDataProvider({ children }: LabelerDataProviderProps): JSX
       const toUpdateMedia = convertMediaObjToPayload(media);
 
       const updatedMedia = await pescarteService.updateMedia(toUpdateMedia);
-
-      console.log('server response update media: ', updatedMedia);
 
       setMedias(
         medias.map((item) => {

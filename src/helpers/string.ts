@@ -21,7 +21,7 @@ export const sanitizeString = (text: string): string => text.replace(/[.*+?^${}(
  * search('string', 'texto de exemplo') // false
  * ```
  */
-export const search = (term: string, text: string): boolean => {
+export const searchString = (term: string, text: string): boolean => {
   if (!text || text === '' || !term || term === '') return false;
 
   const sanitized = sanitizeString(term);

@@ -1,5 +1,6 @@
 import { ChevronLeft, ChevronRight, Save } from 'lucide-react';
 import { useState } from 'react';
+import Skeleton from 'react-loading-skeleton';
 import { ShowDesktop } from '../../../../components/Show/styles';
 import { useContextLabelerData } from '../../providers/LabelerDataProvider';
 import { useContextLabeler } from '../../providers/LabelerProvider';
@@ -15,20 +16,17 @@ import {
  * Componente com os controles de qual midia está sendo exibida
  */
 export const LabelerMediaControl = () => {
-  const { goToNextMedia, goToPrevMedia, activatedMedia, saveMedia, haveChanges } =
+  const { goToNextMedia, goToPrevMedia, saveMedia, haveChanges, activatedMediaIndex } =
     useContextLabeler();
   const { medias, updateLoading, fetchLoading } = useContextLabelerData();
-  const actualIndex = medias.findIndex((media) => media.id === activatedMedia?.id) + 1;
   const [isConfirmExitModalOpen, setIsConfirmExitModalOpen] = useState(false);
   const [confirmExitModalCallback, setConfirmExitModalCallback] = useState<() => void>();
 
   const handleNextClick = () => {
-    console.log('aloha');
     goToNextMedia();
   };
 
   const handlePrevClick = () => {
-    console.log('alohe');
     goToPrevMedia();
   };
 
@@ -40,7 +38,7 @@ export const LabelerMediaControl = () => {
       callback();
     }
   };
-  console.log(haveChanges);
+
   return (
     <StyledMediaControlContainer>
       <ConfirmModal
@@ -59,23 +57,31 @@ export const LabelerMediaControl = () => {
           setIsConfirmExitModalOpen(false);
         }}
       />
-      <StyledMediaControlButton
-        onClick={() => checkExit(handlePrevClick)}
-        title="Ir para Mídia anterior"
-        disabled={updateLoading}
-      >
-        <ChevronLeft aria-label="flecha para esquerda" strokeWidth="1.5" />
-      </StyledMediaControlButton>
-      <StyledMediaControlCounter>
-        {actualIndex} / {medias.length}
-      </StyledMediaControlCounter>
-      <StyledMediaControlButton
-        onClick={() => checkExit(handleNextClick)}
-        title="Ir para próxima Mídia"
-        disabled={updateLoading}
-      >
-        <ChevronRight aria-label="Icone flecha para direita" strokeWidth="1.5" />
-      </StyledMediaControlButton>
+      {activatedMediaIndex !== undefined ? (
+        <>
+          <StyledMediaControlButton
+            onClick={() => checkExit(handlePrevClick)}
+            title="Ir para Mídia anterior"
+            disabled={updateLoading}
+          >
+            <ChevronLeft aria-label="flecha para esquerda" strokeWidth="1.5" />
+          </StyledMediaControlButton>
+
+          <StyledMediaControlCounter>
+            {activatedMediaIndex + 1} / {medias.length}
+          </StyledMediaControlCounter>
+
+          <StyledMediaControlButton
+            onClick={() => checkExit(handleNextClick)}
+            title="Ir para próxima Mídia"
+            disabled={updateLoading}
+          >
+            <ChevronRight aria-label="Icone flecha para direita" strokeWidth="1.5" />
+          </StyledMediaControlButton>
+        </>
+      ) : (
+        <Skeleton width={100} height={24} />
+      )}
       <ShowDesktop>
         <SaveButton
           onClick={saveMedia}

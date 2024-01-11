@@ -3,7 +3,7 @@ import { Dispatch, SetStateAction } from 'react';
 import { SearchFieldContainer, SearchFieldInput } from './styles';
 
 type SearchFieldProps = {
-  onEnterCallback: () => void;
+  onEnterCallback?: () => void;
   searchTerm: string;
   setSearchTerm: Dispatch<SetStateAction<string>>;
 };
@@ -11,7 +11,7 @@ type SearchFieldProps = {
 export const SearchField = ({ onEnterCallback, searchTerm, setSearchTerm }: SearchFieldProps) => {
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
-      onEnterCallback();
+      onEnterCallback && onEnterCallback();
     }
   };
 
